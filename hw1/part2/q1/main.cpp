@@ -6,8 +6,7 @@ int main()
 {
     Polynomial p1;
 
-    p1.NewTerm(2.5, 3);
-    p1.NewTerm(2, 1);
+    std::cin >> p1;
 
     std::cout << p1 << '\n';
 

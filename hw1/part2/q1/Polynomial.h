@@ -2,6 +2,7 @@
 #define POLYNOMIAL_H
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <algorithm>
 #include "global.h"
@@ -45,8 +46,8 @@ public:
     // output functions
     friend std::ostream &operator<<(std::ostream &out, Polynomial &poly);
 
-    //
-    
+    // input functions
+    friend std::istream &operator>>(std::istream &out, Polynomial &poly);
 };
 
 #endif

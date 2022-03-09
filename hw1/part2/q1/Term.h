@@ -10,9 +10,10 @@ private:
     Coefficient coef = 0;
     Exponent exp = 0;
 public:
-    Term(Coefficient c, Exponent e): coef{c}, exp{e} {};
-    Coefficient getCoef() { return coef; };
-    Exponent getExp() { return exp; };
+    Term() {}
+    Term(Coefficient c, Exponent e): coef{c}, exp{e} {}
+    Coefficient getCoef() { return coef; }
+    Exponent getExp() { return exp; }
 friend class Polynomial;
 };
 
