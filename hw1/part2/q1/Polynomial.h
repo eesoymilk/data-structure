@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 #include <algorithm>
 #include "global.h"
 #include "Term.h"
@@ -19,7 +20,7 @@ public:
     // destructor for the polynomial
     ~Polynomial();
 
-    //
+    // add new term
     void NewTerm(const Coefficient c, const Exponent e);
 
     // return the sum of *this and poly
@@ -40,8 +41,8 @@ public:
     // return the largest exponent in *this
     Exponent LeadExp();
 
-    // 
-    std::vector<Term*> getTerms() { return terms; }
+    // return all terms
+    std::vector<Term*> getTerms();
 
     // output functions
     friend std::ostream &operator<<(std::ostream &out, Polynomial &poly);

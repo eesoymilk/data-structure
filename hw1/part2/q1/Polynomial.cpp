@@ -1,36 +1,78 @@
 #include "Polynomial.h"
 
-// #include <vector>
-// #include <algorithm>
-// #include "Term.h"
-
-Polynomial::Polynomial()
-{
-    terms = std::vector<Term*>(0);
-};
+Polynomial::Polynomial() { terms = std::vector<Term*>(0); }
 
 Polynomial::~Polynomial()
 {
     for (int i = 0; i < terms.size(); i++) delete terms[i];
     terms.clear();
-};
+}
 
 void Polynomial::NewTerm(const Coefficient c, const Exponent e)
 {
-    terms.push_back(new Term(c, e));
+    if (c == 0) return;
+    if (terms.empty()) {
+        terms.push_back(new Term(c, e));
+    } else {
+        int idx;
+        for (idx = 0; idx < terms.size() && e <= terms[idx]->exp; idx++) {
+            if (e == terms[idx]->exp) {
+                terms[idx]->coef += c;
+                return;
+            }
+        }
+        terms.insert(terms.begin() + idx, new Term(c, e));
+    }
 }
 
-// Polynomial Polynomial::Add(Polynomial poly)
-// {
-//     terms = std::vector<Term*>(0);
-// };
+Polynomial Polynomial::Add(Polynomial poly)
+{
+    Polynomial res;
+    for (auto term: this->terms) res.NewTerm(term->coef, term->exp);
+    for (auto term: poly.terms) res.NewTerm(term->coef, term->exp);
+    return res;
+}
+
+Polynomial Polynomial::Mult(Polynomial poly)
+{
+    Polynomial res;
+    for (auto multiplier_term: this->terms)
+        for (auto multiplicand_term: poly.terms)
+            res.NewTerm(
+                multiplier_term->coef * multiplicand_term->coef,
+                multiplier_term->exp + multiplicand_term->exp
+            );
+    return res;
+}
+
+float Polynomial::Eval(float f) {
+    float res = 0;
+    for (auto term : this->terms)
+        res += term->coef * pow(f, term->exp); 
+    return res;
+}
+
+int Polynomial::operator!() { return this->terms.empty() ? 1 : 0; }
+
+Coefficient Polynomial::Coef(Exponent e) {
+    if (e > this->LeadExp()) return 0;
+    for (int idx = 0; idx < this->terms.size(); idx++) {
+        if (e == this->terms[idx]->exp) return this->terms[idx]->coef;
+        if (e < this->terms[idx]->exp) return 0;
+    }
+    return 0;
+}
+
+Exponent Polynomial::LeadExp() { return this->terms.empty() ? 0 : this->terms[0]->exp; }
+
+std::vector<Term*> Polynomial::getTerms() { return terms; }
 
 std::ostream &operator<<(std::ostream &out, Polynomial &poly) {
     std::vector<Term*> terms = poly.getTerms();
     for (int i = 0, cap = terms.size(); i < cap; i++) {
         const Coefficient c = terms[i]->getCoef();
         const Exponent e = terms[i]->getExp();
-        if (c != 1.0 && e != 0) out << c;
+        if (c != 1.0 || (c == 1 && e == 0)) out << c;
         if (e != 0) {
             out << "x";
             if (e != 1) out << '^' << e;
@@ -43,13 +85,10 @@ std::ostream &operator<<(std::ostream &out, Polynomial &poly) {
 std::istream &operator>>(std::istream &in, Polynomial &poly) {
     std::string str_in;
     std::vector<std::string> str_terms;
-
     std::getline(in, str_in);
-    // std::cout << "Raw input: " << str_in << '\n'; 
 
     // remove all whitespaces
     str_in.erase(remove(str_in.begin(), str_in.end(), ' '), str_in.end());
-    // std::cout << "No whitespaces: " << str_in << '\n'; 
 
     // get terms in string form
     while (str_in.length()) {
@@ -61,14 +100,10 @@ std::istream &operator>>(std::istream &in, Polynomial &poly) {
             str_terms.push_back(str_in.substr(0, len));
             str_in.erase(str_in.begin(), str_in.begin() + len);
         }
-        // std::cout << "string extracted: " << *(str_terms.rbegin()) << '\n';
-        // std::cout << "string left: " << str_in << '\n';
     }
 
-    // std::cout << "Terms in string forms:\n";
     // process each terms: eg, 3.6 x ^ 4
     for (auto str_term: str_terms) {
-        // std::cout << str_term << '\n';
         Coefficient c;
         Exponent e;
         if (str_term.find('x') == std::string::npos) {
@@ -81,7 +116,7 @@ std::istream &operator>>(std::istream &in, Polynomial &poly) {
             c = Coefficient(std::stod(str_term.substr(0, str_term.find('x'))));
             e = Exponent(std::stoi(str_term.substr(str_term.find('^') + 1, std::string::npos)));
         }
-        poly.terms.push_back(new Term(c, e));
+        poly.NewTerm(c, e);
     }
 
     return in;
