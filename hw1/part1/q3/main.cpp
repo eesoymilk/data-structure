@@ -37,7 +37,7 @@ public:
 	friend class ComplexMatrix;
 };
 
-Matrix Matrix::operator+ (const Matrix &x) const
+Matrix Matrix::operator+(const Matrix &x) const
 {
     Matrix res(row, col);
     for (int i = 0; i < row; i++)
@@ -46,7 +46,7 @@ Matrix Matrix::operator+ (const Matrix &x) const
     return res;
 }
 
-Matrix Matrix::operator- (const Matrix &x) const
+Matrix Matrix::operator-(const Matrix &x) const
 {
     Matrix res(row, col);
     for (int i = 0; i < row; i++)
