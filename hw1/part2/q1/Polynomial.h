@@ -6,8 +6,22 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-#include "global.h"
-#include "Term.h"
+
+#define Coefficient float
+#define Exponent int
+
+class Term
+{
+friend class Polynomial;
+private:
+    Coefficient coef = 0;
+    Exponent exp = 0;
+public:
+    Term() {}
+    Term(Coefficient c, Exponent e): coef{c}, exp{e} {}
+    Coefficient getCoef() { return coef; }
+    Exponent getExp() { return exp; }
+};
 
 class Polynomial
 {

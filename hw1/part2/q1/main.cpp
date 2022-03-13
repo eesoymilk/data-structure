@@ -1,5 +1,4 @@
 #include <iostream>
-#include "global.h"
 #include "Polynomial.h"
 
 int main()
