@@ -16,8 +16,5 @@ int main()
     p4 = p1.Mult(p2);
     std::cout << "p4 = p1 * p2: " << p4 << '\n';
 
-    std::cout << "p1: " << p1 << '\n';
-    std::cout << "p2: " << p2 << '\n';
-
     return 0;
 }

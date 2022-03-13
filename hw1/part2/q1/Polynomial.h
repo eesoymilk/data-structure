@@ -26,13 +26,10 @@ public:
 class Polynomial
 {
 private:
-    std::vector<Term*> terms;
+    std::vector<Term> terms = std::vector<Term>(0);
 public:
     // construct the polynomial p(x) = 0
-    Polynomial();
-
-    // destructor for the polynomial
-    ~Polynomial();
+    Polynomial() {}
 
     // add new term
     void NewTerm(const Coefficient c, const Exponent e);
@@ -56,7 +53,7 @@ public:
     Exponent LeadExp();
 
     // return all terms
-    std::vector<Term*> getTerms();
+    std::vector<Term> getTerms();
 
     // output functions
     friend std::ostream &operator<<(std::ostream &out, Polynomial &poly);
