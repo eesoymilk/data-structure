@@ -18,12 +18,11 @@ public:
 class SparseMatrix
 {
 private:
-	int rows, cols, terms, capacity;
-	std::vector<MatrixTerm> smArray;
+	int rows, cols;
+	std::vector<MatrixTerm> smArray = std::vector<MatrixTerm>(0);
 public:
-	// The constructor function creates a SparseMatrix with
-	// r rows, c columns, and a cpacity of t nonzero terms.
-    SparseMatrix(int r, int c, int t);
+	// The constructor function creates a SparseMatrix with r rows, c columns.
+    SparseMatrix(int r, int c): rows(r), cols(c) {};
 
 	// If sum != 0, then it along with its row and colum postition are stored
 	// as last term in *this.
