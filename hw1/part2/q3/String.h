@@ -5,7 +5,7 @@
 class String
 {
 private:
-	char *str;
+	char *str = nullptr;
 public:
     // Constructor that initializes *this to string init of length m.
     String(char *init, int m);
@@ -21,12 +21,12 @@ public:
     int Length();
 
 	// Return a string whose elements are those of *this followed by those of t.
-    String Concat(String t);
+    String Concat(const String t);
 
     // Return a string containing the j characters of *this at position i,
 	// i + 1, ..., i + j - 1 if those are valid position of *this; otherwise,
 	// throw and exception.
-    String Substr(int i, int j);
+    String Substr(const int i, const int j);
 
 	// Return an index i such that pat matches the substring of *this that
 	// begins at position i. Return -1 if pat is either empty of not a
@@ -48,6 +48,12 @@ public:
 	// Compare two strings with the rule above and return either -1, 0, or +1
 	// if x < y, x == y, or x > y, respectively.
 	int Compare(String y);
+
+	// input function
+	friend std::istream &operator>>(std::istream &in, String &s);
+
+	// output function
+	friend std::ostream &operator<<(std::ostream &out, String &s);
 };
 
 #endif

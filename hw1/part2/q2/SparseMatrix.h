@@ -2,6 +2,7 @@
 #define SPARSE_MATRIX_H
 #include <iostream>
 #include <vector>
+#include <tuple>
 
 class MatrixTerm
 {
@@ -11,6 +12,7 @@ private:
 public:
 	MatrixTerm() {}
 	MatrixTerm(int r, int c, int val): row(r), col(c), value(val) {}
+	std::tuple<int, int, int> getTerm() { return {row, col, value}; }
 };
 
 // A set of triples, <row, column, value>, where row and column are non-
