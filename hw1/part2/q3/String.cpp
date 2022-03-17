@@ -68,7 +68,7 @@ String String::Substr(const int i, const int j)
 
 	char *buf = new char[j + 1];
 	for (int idx = i; idx < j; idx++) buf[idx - i] = str[idx];
-	buf[j] = '\n';
+	buf[j] = '\0';
 	String subStr(buf, j);
 	delete[] buf;
 	return subStr;
@@ -87,7 +87,12 @@ int String::Find(String pat)
 // characters beginning at "start" have been removed.
 String String::Delete(int start, int length)
 {
-	
+	String delStr = this->Substr(0, start);
+	if (start + length < this->Length()) {
+		int i = start + length, j = this->Length() - i;
+		delStr.Concat(this->Substr(i, j));
+	}
+	return delStr;
 }
 
 // Return the string with all occurrence of c removed.
