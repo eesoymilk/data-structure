@@ -12,13 +12,13 @@ public:
 
     // If the string represented by *this equals t, return true;
 	// else return false.
-    bool operator==(String t);
+    bool operator==(const String& t);
 
 	// If *this is empty then return true; else return false.
     bool operator!();
 
 	// Return the number of characters in *this.
-    int Length();
+    int Length() const;
 
 	// Return a string whose elements are those of *this followed by those of t.
     String Concat(const String t);

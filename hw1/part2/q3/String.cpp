@@ -18,7 +18,7 @@ String::String(char *init, int m)
 
 // If the string represented by *this equals t, return true;
 // else return false.
-bool String::operator==(String t)
+bool String::operator==(const String& t)
 {
 	const int l = this->Length();
 	if (t.Length() != l)
@@ -37,7 +37,7 @@ bool String::operator!()
 }
 
 // Return the number of characters in *this.
-int String::Length()
+int String::Length() const
 {
 	if (str == nullptr) return 0;
 

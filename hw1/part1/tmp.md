@@ -1,4 +1,27 @@
 $$
+\def\arraystretch{1.2}\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+c[0]&c[1]&c[2]&\dotsm&c[n-a]&c[n-a+1]&c[n-a+2]&\dotsm&c[2n-2a+1]&c[2n-2a+2]&\dotsm&c[ab-an-bn-1]\\\hline
+A_{a-1\:0}&A_{a\:1}&A_{a+1\:2}&\dotsm&A_{n-1\:n-a}&A_{a-2\:0}&A_{a-1\:1}&\dotsm&A_{n-1\:n-a+1}&A_{a-3\:0}&\dotsm&A_{n-b\:n-1}\\\hline\end{array}
+$$
+
+<!-- $$
+\begin{aligned}
+number\:of\:elememet\:in\:A_{n,a,b}&=n^2-\frac{(n-a)\times(n-a+1)}{2}-\frac{(n-b)\times(n-b+1)}{2}\\
+&=\frac{-1}{2}a^2+\frac{-1}{2}b^2+an+bn-n+\frac{1}{2}a+\frac{1}{2}b\\
+&=\frac{-1}{2}(a^2-a+b^2-b)+an+bn-n
+\end{aligned}
+$$ -->
+
+<!-- $$
+\begin{aligned}
+&\text{Assume $\alpha$ is the base address for $a[0][0],\dots,[0]$, then}\\
+&\text{the address for }a[i_1][i_2],\dots,[i_n]\text{ in column-major representation}\\
+&=\alpha+i_1+u_1\Big(i_2+u_2\big(i_3+(\dotsm+i_nu_{n-1})\dotsm\big)\Big)\\
+&=\alpha+\sum\limits_{j=1}^{n}\Bigg(\prod\limits_{k=1}^{j-1}u_k\Bigg)i_j\quad where\;\prod\limits_{k=1}^0u_k=1\\
+\end{aligned}
+$$ -->
+
+<!-- $$
 \begin{aligned}
 &\text{Suppose all matrices are \ }n\times n.\\\\
 &\text{In a general matrix addtion (operation+ in class Matrix):}\\
@@ -17,8 +40,7 @@ $$
   number\:of\:multiplication&=4n^3
 \end{cases}\\
 \end{aligned}
-$$
-
+$$ -->
 
 <!-- $$
 \large\begin{aligned}
@@ -57,13 +79,13 @@ $$
 &\alpha+\sum\limits_{j=1}^{n-2}i_ja_j+i_n\times u_{n-1} + i_{n-1}\quad where\;a_j=\prod\limits_{k=j+1}^nu_k\quad1\le j\le n-2
 \end{aligned}
 $$ -->
-
-<!-- $$
+<!--
+$$
 \large\begin{array}{|c|c|c|c|c|}\hline
 \text{line} & \text{s/e} & \text{frequency} & \text{step counts}\\\hline
 \text{1} & 0 & - & 0  \\\hline
 \text{2} & 0 & - & 0  \\\hline
-\text{3} & 1 & m+1 & m+1 \\\hline 
+\text{3} & 1 & m+1 & m+1 \\\hline
 \text{4} & 1 & m(p+1) & mp+m \\\hline
 \text{5} & 1 & mp & mp \\\hline
 \text{6} & 1 & mp(n+1) & mpn+mp \\\hline
@@ -72,6 +94,7 @@ $$ -->
 \text{9} & 0 & - & 0 \\\hline
 \end{array}
 $$
+
 $$
 \large Total\:Step\:Count=2mnp+3mp+2m+1
 $$
@@ -81,7 +104,7 @@ $$
 \text{line} & \text{s/e} & \text{frequency} & \text{total steps}\\\hline
 \text{1} & 0 & - & \Theta(0) \\\hline
 \text{2} & 0 & - & \Theta(0) \\\hline
-\text{3} & 1 & m+1 & \Theta(m) \\\hline 
+\text{3} & 1 & m+1 & \Theta(m) \\\hline
 \text{4} & 1 & m(p+1) & \Theta(mp) \\\hline
 \text{5} & 1 & mp & \Theta(mp) \\\hline
 \text{6} & 1 & mp(n+1) & \Theta(mnp) \\\hline
@@ -96,7 +119,7 @@ $$
 \text{line} & \text{s/e} & \text{frequency} & \text{total steps}\\\hline
 \text{1} & 0 & - & \Theta(0) \\\hline
 \text{2} & 0 & - & \Theta(0) \\\hline
-\text{3} & 1 & m+1 & \Theta(m) \\\hline 
+\text{3} & 1 & m+1 & \Theta(m) \\\hline
 \text{4} & 1 & m(n+1) & \Theta(mn) \\\hline
 \text{5} & 1 & mn & \Theta(mn) \\\hline
 \text{6} & 1 & mn & \Theta(mn) \\\hline
