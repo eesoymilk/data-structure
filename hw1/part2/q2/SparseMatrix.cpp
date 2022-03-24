@@ -40,17 +40,9 @@ SparseMatrix SparseMatrix::Add(SparseMatrix b)
 
 	SparseMatrix res(rows, cols);
 	int a_idx = 0, b_idx = 0, a_size = smArray.size(), b_size = b.smArray.size();
-	for (int r = 0; r < rows; r++) {
-		for (int c = 0; c < cols; c++) {
-			int val = 0;
-			if (smArray[a_idx].row == r && smArray[a_idx].col == c)
-				val += smArray[a_idx].value;
-			if (b.smArray[b_idx].row == r && b.smArray[b_idx].col == c)
-				val += b.smArray[b_idx].value;
-			if (val != 0)
-				res.smArray.push_back(MatrixTerm(r, c, val));
-		}
-	}
+	// while (a_idx < a_size || b_idx < b_size) {
+	// 	if (smArray[a_idx].row > smArray[b_idx])
+	// }
 
 	return res;
 }

@@ -59,7 +59,7 @@ public:
     friend std::ostream &operator<<(std::ostream &out, Polynomial &poly);
 
     // input functions
-    friend std::istream &operator>>(std::istream &out, Polynomial &poly);
+    friend std::istream &operator>>(std::istream &in, Polynomial &poly);
 };
 
 #endif
