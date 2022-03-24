@@ -13,6 +13,7 @@ public:
 	MatrixTerm() {}
 	MatrixTerm(int r, int c, int val): row(r), col(c), value(val) {}
 	std::tuple<int, int, int> getTerm() { return {row, col, value}; }
+	const std::tuple<int, int, int> getTerm() const { return {row, col, value}; }
 };
 
 // A set of triples, <row, column, value>, where row and column are non-
@@ -23,8 +24,14 @@ private:
 	int rows, cols;
 	std::vector<MatrixTerm> smArray = std::vector<MatrixTerm>(0);
 public:
+	// Default constructor
+    SparseMatrix() {}
+
 	// The constructor function creates a SparseMatrix with r rows, c columns.
-    SparseMatrix(int r, int c): rows(r), cols(c) {};
+    SparseMatrix(int r, int c): rows(r), cols(c) {}
+
+	// The constructor function creates a SparseMatrix with r rows, c columns, t empty terms.
+    SparseMatrix(int r, int c, int t): rows(r), cols(c), smArray(std::vector<MatrixTerm>(t)) {}
 
 	// If sum != 0, then it along with its row and colum postition are stored
 	// as last term in *this.
@@ -51,7 +58,7 @@ public:
 	friend std::istream &operator>>(std::istream &in, SparseMatrix &sm);
 
 	// output function
-	friend std::ostream &operator<<(std::ostream &out, SparseMatrix &sm);
+	friend std::ostream &operator<<(std::ostream &out, const SparseMatrix &sm);
 };
 
 #endif

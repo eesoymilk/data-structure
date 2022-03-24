@@ -102,15 +102,19 @@ std::istream &operator>>(std::istream &in, Polynomial &poly) {
         Exponent e;
 
         if (str_term.find('x') == std::string::npos) {
-            // cannot find x: CONSTANT TERM
+            // cannot find x: CONSTANT TERM, exponent == 0
             c = Coefficient(std::stod(str_term));
             e = Exponent(0);
         } else if (str_term.find('^') == std::string::npos) {
-            // cannot find ^
-            c = Coefficient(std::stod(str_term.substr(0, str_term.length() - 1)));
+            // cannot find ^: exponent == 1
+            if (str_term[0] == 'x') c = 1;
+            else if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
+            else c = Coefficient(std::stod(str_term.substr(0, str_term.length() - 1)));
             e = Exponent(1);
         } else {
-            c = Coefficient(std::stod(str_term.substr(0, str_term.find('x'))));
+            if (str_term[0] == 'x') c = 1;
+            else if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
+            else c = Coefficient(std::stod(str_term.substr(0, str_term.find('x'))));
             e = Exponent(std::stoi(str_term.substr(str_term.find('^') + 1, std::string::npos)));
         }
         poly.NewTerm(c, e);

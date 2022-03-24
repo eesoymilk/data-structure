@@ -1,14 +1,25 @@
 #ifndef STRING_H
 #define STRING_H
 #include <iostream>
+#include <vector>
 
 class String
 {
 private:
 	char *str = nullptr;
+	int *f = nullptr;
 public:
+    // Default constructor
+    String() {}
+
     // Constructor that initializes *this to string init of length m.
     String(char *init, int m);
+
+	// Destructor for String.
+    ~String();
+
+	// Compute the failure function for the pattern *this
+	void FailureFunction();
 
     // If the string represented by *this equals t, return true;
 	// else return false.
@@ -21,12 +32,14 @@ public:
     int Length() const;
 
 	// Return a string whose elements are those of *this followed by those of t.
-    String Concat(const String t);
+    String Concat(const String& t);
 
     // Return a string containing the j characters of *this at position i,
 	// i + 1, ..., i + j - 1 if those are valid position of *this; otherwise,
 	// throw and exception.
     String Substr(const int i, const int j);
+
+	
 
 	// Return an index i such that pat matches the substring of *this that
 	// begins at position i. Return -1 if pat is either empty of not a
@@ -53,7 +66,7 @@ public:
 	friend std::istream &operator>>(std::istream &in, String &s);
 
 	// output function
-	friend std::ostream &operator<<(std::ostream &out, String &s);
+	friend std::ostream &operator<<(std::ostream &out, const String &s);
 };
 
 #endif
