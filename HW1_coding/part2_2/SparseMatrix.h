@@ -40,7 +40,7 @@ public:
 	// Returns the SparseMatrix obtained by interchanging the row and column
 	// value of every triple in *this.
 	// This function is implemented by FastTranspose.
-    SparseMatrix Transpose();
+    SparseMatrix FastTranspose();
 
 	// If the dimensions of *this and b are the same, then the matrix produced
 	// by adding corresponding items, namely those with identical row and

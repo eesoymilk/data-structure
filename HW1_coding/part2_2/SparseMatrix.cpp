@@ -12,7 +12,7 @@ void SparseMatrix::StoreSum(const int sum, const int r, const int c)
 	smArray.push_back(MatrixTerm(r, c, sum));
 }
 
-SparseMatrix SparseMatrix::Transpose()
+SparseMatrix SparseMatrix::FastTranspose()
 {
 	if (smArray.empty()) return SparseMatrix(cols, rows);
 
@@ -40,9 +40,28 @@ SparseMatrix SparseMatrix::Add(SparseMatrix b)
 
 	SparseMatrix res(rows, cols);
 	int a_idx = 0, b_idx = 0, a_size = smArray.size(), b_size = b.smArray.size();
-	// while (a_idx < a_size || b_idx < b_size) {
-	// 	if (smArray[a_idx].row > smArray[b_idx])
-	// }
+	while (a_idx < a_size || b_idx < b_size) {
+		if (a_idx >= a_size) {
+			res.smArray.push_back(b.smArray[b_idx++]);
+			continue;
+		}
+		if (b_idx >= b_size) {
+			res.smArray.push_back(smArray[a_idx++]);
+			continue;
+		}
+
+		int a_pos = smArray[a_idx].row * cols + smArray[a_idx].col;
+		int b_pos = b.smArray[b_idx].row * cols + b.smArray[b_idx].col;
+
+		if (a_pos > b_pos) res.smArray.push_back(MatrixTerm(b.smArray[b_idx++]));
+		else if (a_pos < b_pos) res.smArray.push_back(MatrixTerm(smArray[a_idx++]));
+		else if (smArray[a_idx].value + b.smArray[b_idx].value != 0) {
+			int r = smArray[a_idx].row;
+			int c = smArray[a_idx].col;
+			int val = smArray[a_idx++].value + b.smArray[b_idx++].value;
+			res.smArray.push_back(MatrixTerm(r, c, val));
+		}
+	}
 
 	return res;
 }
@@ -52,23 +71,18 @@ SparseMatrix SparseMatrix::Multiply(SparseMatrix b)
 	if (cols != b.rows) throw "Incompatible matrices";
 
 	int a_idx = 0, b_idx = 0;
-	SparseMatrix res(rows, b.cols), b_transpose = b.Transpose();
+	SparseMatrix res(rows, b.cols), b_transpose = b.FastTranspose();
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < b.cols; c++) {
 			int val = 0;
+			while (smArray[a_idx].row < r) a_idx++;
+			while (b_transpose.smArray[b_idx].row < r) b_idx++;
 			while (smArray[a_idx].row <= r 
 				&& b_transpose.smArray[b_idx].row <= r)
 			{
-				if (smArray[a_idx].row < r) {
-					a_idx++;
-					continue;
-				}
-				if (b_transpose.smArray[b_idx].row < r){
-					b_idx++;
-					continue;
-				}
 				if (smArray[a_idx].col == b_transpose.smArray[b_idx].col)
-					val += smArray[a_idx].value * b_transpose.smArray[b_idx].value;
+					val +=
+						smArray[a_idx++].value * b_transpose.smArray[b_idx++].value;
 				else if (smArray[a_idx].col > b_transpose.smArray[b_idx].col)
 					b_idx++;
 				else

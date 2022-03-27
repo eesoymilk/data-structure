@@ -5,7 +5,6 @@ String::String(char *init, int m)
 {
 	int l;
 	for (l = 0; init[l] != '\0' && l < m; l++) ;
-	// std::cout << "length = " << l << '\n';
 	str = new char[l + 1];
 	for (int i = 0; i < l; i++) str[i] = init[i];
 	str[l] = '\0';
@@ -83,7 +82,7 @@ String String::Substr(const int i, const int j)
 	if (i + j > Length()) throw "invalid substring.";
 
 	char *buf = new char[j + 1];
-	for (int idx = i; idx < j; idx++) buf[idx - i] = str[idx];
+	for (int idx = i; idx < i + j; idx++) buf[idx - i] = str[idx];
 	buf[j] = '\0';
 	String subStr(buf, j);
 	delete[] buf;
@@ -94,7 +93,7 @@ String String::Substr(const int i, const int j)
 // begins at position i. Return -1 if pat is either empty of not a
 // substring of *this.
 // This function is implemented by FastFind.
-int String::Find(String pat)
+int String::FastFind(String pat)
 {
 	int pat_idx = 0, str_idx = 0, pat_length = pat.Length(), str_length = Length();
 	while ((pat_idx < pat_length) && (str_idx < str_length)) {
@@ -102,7 +101,7 @@ int String::Find(String pat)
 			pat_idx++;
 			str_idx++;
 		} else {
-			if (pat_idx == 0) pat_idx++;
+			if (pat_idx == 0) str_idx++;
 			else pat_idx = pat.f[pat_idx - 1] + 1;
 		}
 	}
@@ -117,7 +116,7 @@ String String::Delete(int start, int length)
 	String delStr = Substr(0, start);
 	if (start + length < Length()) {
 		int i = start + length, j = Length() - i;
-		delStr.Concat(Substr(i, j));
+		return delStr.Concat(Substr(i, j));
 	}
 	return delStr;
 }
@@ -125,10 +124,10 @@ String String::Delete(int start, int length)
 // Return the string with all occurrence of c removed.
 String String::CharDelete(char c)
 {
-	char *buf = new char[Length() + 1];
-	int i = 0, idx = 0, l = Length();
-	for ( ; i < l; i++) if (str[i] != c) buf[idx++] = str[i];
-	buf[idx++] = '\0';
+	int idx = 0, l = Length();
+	char *buf = new char[l + 1];
+	for (int i = 0; i < l; i++) if (str[i] != c) buf[idx++] = str[i];
+	buf[idx] = '\0';
 	String charDelStr(buf, idx);
 	delete[] buf;
 	return charDelStr;

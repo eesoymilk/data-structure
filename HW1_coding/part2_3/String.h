@@ -45,7 +45,7 @@ public:
 	// begins at position i. Return -1 if pat is either empty of not a
 	// substring of *this.
 	// This function is implemented by FastFind.
-    int Find(String pat);
+    int FastFind(String pat);
 
 	// Return a new string that is equivalent to *this, except that "length"
 	// characters beginning at "start" have been removed.
@@ -67,6 +67,12 @@ public:
 
 	// output function
 	friend std::ostream &operator<<(std::ostream &out, const String &s);
+
+	std::vector<int> getf() {
+		std::vector<int> fs(0);
+		for (int i = 0; i < Length(); i++) fs.push_back(f[i]);
+		return fs;
+	};
 };
 
 #endif
