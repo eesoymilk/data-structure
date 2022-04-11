@@ -86,9 +86,6 @@ template <class T>
 void Queue<T>::Push(const T &x)
 {
     if ((rear + 1) % capacity == front) {
-        // std::cout << "before doubling capacity:\n";
-        // Print();
-
         int new_capacity = capacity * 2;
         T *new_queue = new T[new_capacity];
         std::fill(new_queue, new_queue + new_capacity, 0);
@@ -104,13 +101,9 @@ void Queue<T>::Push(const T &x)
         capacity = new_capacity;
         delete[] queue;
         queue = new_queue;
-
-        // std::cout << "after doubling capacity:\n";
-        // Print();
     }
     rear = (rear + 1) % capacity;
     queue[rear] = x;
-    // std::cout << "Size() = " << Size() << '\n';
 }
 
 template <class T>
