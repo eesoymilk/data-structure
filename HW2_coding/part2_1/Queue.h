@@ -28,17 +28,17 @@ public:
     // else return false.
     inline bool IsEmpty() const { return front == rear; }
 
+    // Insert item at the rear of the queue.
+    void Push(const T &item);
+
+    // Delete the front element of the queue
+    void Pop();
+
     // Return the element at the front of the queue.
     T &Front() const;
 
     // Return the element at the rear of the queue.
     T &Rear() const;
-
-    // Insert item at the rear of the queue.
-    void Push(const T &item);
-
-    // Delete the front element of the queue
-    T Pop();
 
     //
     int Size();
@@ -52,11 +52,6 @@ public:
     friend Queue Merge<T>(Queue<T> q1, Queue<T> q2);
 
     friend std::ostream &operator<<<T>(std::ostream &out, const Queue<T> &q);
-    // friend Queue Merge<T>(Queue<T> q1, Queue<T> q2)
-    // {
-    //     std::cout << "Merging...\n";
-    // };
-    // friend Queue Merge<>(Queue q1, Queue q2);
 };
 
 template <class T>
@@ -66,20 +61,6 @@ Queue<T>::Queue(int queueCapacity) : capacity(queueCapacity)
     queue = new T[capacity];
     std::fill(queue, queue + capacity, 0);
     front = rear = 0;
-}
-
-template <class T>
-inline T &Queue<T>::Front() const
-{
-    if (IsEmpty()) throw "Queue is empty. No front element.";
-    return queue[(front + 1) % capacity];
-}
-
-template <class T>
-inline T &Queue<T>::Rear() const
-{
-    if (IsEmpty()) throw "Queue is empty. No rear element.";
-    return queue[rear];
 }
 
 template <class T>
@@ -107,11 +88,24 @@ void Queue<T>::Push(const T &x)
 }
 
 template <class T>
-T Queue<T>::Pop()
+void Queue<T>::Pop()
 {
     if (IsEmpty()) throw "Queue is empty. Cannot delete.";
     front = (front + 1) % capacity;
-    return queue[front];
+}
+
+template <class T>
+inline T &Queue<T>::Front() const
+{
+    if (IsEmpty()) throw "Queue is empty. No front element.";
+    return queue[(front + 1) % capacity];
+}
+
+template <class T>
+inline T &Queue<T>::Rear() const
+{
+    if (IsEmpty()) throw "Queue is empty. No rear element.";
+    return queue[rear];
 }
 
 template <class T>
