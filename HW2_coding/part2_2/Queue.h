@@ -3,11 +3,13 @@
 
 #include <iostream>
 
+#include "Stack.h"
+
 template <class T>
 class Queue;
 
 template <class T>
-Queue<T> Merge(Queue<T> q1, Queue<T> q2);
+Queue<T> reverseQueue(Queue<T> q);
 
 template <class T>
 std::ostream &operator<<(std::ostream &out, const Queue<T> &q);
@@ -40,18 +42,16 @@ public:
     // Return the element at the rear of the queue.
     T &Rear() const;
 
-    // Return the size of the queue
+    //
     int Size();
 
-    // Return the capacity of the queue
+    //
     inline int Capacity() { return capacity; }
 
-    // Debug print
+    // Print out the array inside this class
     void PrintRaw();
 
-    // Merge two queues into a one by alternately taking elements from each
-    // queue. The relative order of queue elements is unchanged.
-    friend Queue Merge<T>(Queue<T> q1, Queue<T> q2);
+    friend Queue reverseQueue<T>(Queue<T> q);
 
     friend std::ostream &operator<<<T>(std::ostream &out, const Queue<T> &q);
 };
@@ -125,24 +125,15 @@ void Queue<T>::PrintRaw()
 }
 
 template <class T>
-Queue<T> Merge(Queue<T> q1, Queue<T> q2)
+Queue<T> reverseQueue(Queue<T> q)
 {
-    Queue<T> merged_queue;
-    int q1_front = q1.front, q2_front = q2.front;
-    while (true) {
-        if (!q1.IsEmpty()) {
-            merged_queue.Push(q1.Front());
-            q1.Pop();
-        }
-        if (!q2.IsEmpty()) {
-            merged_queue.Push(q2.Front());
-            q2.Pop();
-        }
-        if (q1.IsEmpty() && q2.IsEmpty()) break;
-    }
-    q1.front = q1_front;
-    q2.front = q2_front;
-    return merged_queue;
+    Queue<T> reversed_queue;
+    Stack<T> s;
+
+    for (; !q.IsEmpty(); q.Pop()) s.Push(q.Front());
+    for (; !s.IsEmpty(); s.Pop()) reversed_queue.Push(s.Top());
+
+    return reversed_queue;
 }
 
 template <class T>

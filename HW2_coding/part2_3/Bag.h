@@ -112,7 +112,7 @@ template <class T>
 int Queue<T>::Size()
 {
     int size = rear - front;
-    return size > 0 ? size : size + capacity;
+    return size >= 0 ? size : size + capacity;
 }
 
 template <class T>
