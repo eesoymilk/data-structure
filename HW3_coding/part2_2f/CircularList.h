@@ -17,10 +17,11 @@ class Node
 
 private:
     T data;
-    Node<T>* link;
+    Node<T>* link = nullptr;
 
 public:
-    Node(T element, Node* next = nullptr) : data(element), link(next){};
+    Node() {}
+    Node(T element, Node* next = nullptr) : data(element), link(next) {}
 };
 
 template <class T>
@@ -56,62 +57,51 @@ public:
     void Print();
 
 private:
-    Node<T>*first = nullptr, *last = nullptr;
+    Node<T>*head = new Node<T>(), *last = head;
 };
 
 template <class T>
-CircularList<T>::CircularList(Node<T>* f) : first(f)
+CircularList<T>::CircularList(Node<T>* h) : head(h)
 {
-    if (first == nullptr) return;
-
-    Node<T>* now = first;
-    while (now->link != first) now = now->link;
+    Node<T>* now = head->link;
+    while (now->link != head) now = now->link;
     last = now;
 }
 
 template <class T>
 void CircularList<T>::InsertFront(const T& e)
 {
-    // The list is empty, just assign first and last
-    if (first == nullptr) {
-        first = new Node<T>(e);
-        last = first;
-        last->link = first;
-        return;
-    };
-
-    // Create a new node with link pointing to the original first
-    // and assign it to first.
-    last->link = first = new Node<T>(e, first);
+    // Create the new node
+    Node<T>* newNode = new Node<T>(e);
+    // the list is empty, last needs to take in consideration
+    if (head == last) {
+        last = head->link = newNode;
+        last->link = head;
+    } else {
+        // add the node to the front as instructed
+        Node<T>* front = head->link;
+        newNode->link = front;
+        head->link = newNode;
+    }
 }
 
 template <class T>
 void CircularList<T>::InsertBack(const T& e)
 {
-    // The list is empty, just assign first and last
-    if (first == nullptr) {
-        first = new Node<T>(e);
-        last = first;
-        last->link = first;
-        return;
-    };
-
-    // Create a new node with link pointing to first and assign it to last.
-    last = last->link = new Node<T>(e, first);
+    // add node after last
+    last = last->link = new Node<T>(e, head);
 }
 
 template <class T>
 void CircularList<T>::DeleteFront()
 {
     // The list is empty, do nothing
-    if (first == nullptr) return;
+    if (head == last) return;
 
-    // front to store first element
-    Node<T>* front = first;
-    // only one element in the list, assign both first and last to nullptr(0)
-    if (first == last) first = last = nullptr;
-    // skip the first element and delete it
-    else last->link = first = first->link;
+    // front to store head element
+    Node<T>* front = head->link;
+    if (front == last) last = head;
+    head->link = front->link;
     delete front;
 }
 
@@ -119,65 +109,76 @@ template <class T>
 void CircularList<T>::DeleteBack()
 {
     // The list is empty, do nothing
-    if (first == nullptr) return;
+    if (head == last) return;
 
     // back to store last element
     Node<T>* back = last;
 
-    // only one element in the list, assign both first and last to nullptr(0)
-    if (first == last) {
-        first = last = nullptr;
+    // only one element in the list, assign both head and last to nullptr(0)
+    if (head->link == last) {
+        last = head->link = head;
     } else {
         // traverse until the element prior to last, and then skip it
-        Node<T>* now = first;
+        Node<T>* now = head->link;
         while (now->link != last) now = now->link;
-        now->link = first;
+        now->link = head;
         last = now;
     }
-    // delete back
     delete back;
 }
 
 template <class T>
 void CircularList<T>::DeleteOdd()
 {
-    if (first == nullptr) return;
-    if (first == last) {
-        delete first;
-        first = last = nullptr;
+    // No elements in the list, do nothing
+    if (head == last) return;
+    // Only one element in the list, delete it and adjust head and last
+    if (head->link == last) {
+        delete head->link;
+        last = head->link = head;
     }
 
-    Node<T>* even = first->link;
+    // front is the first element in the list
+    // even and odd are the looping pointers
+    Node<T>* front = head->link;
+    Node<T>* even = front->link;
     Node<T>* odd = even->link;
 
-    delete first;
-    first = even;
+    // delete front since 1 is odd and readjust head
+    delete front;
+    head->link = even;
+    // Traverse through the list with even and odd
+    // with odd being ahead of even by 1 node
     while (even != last && even->link != last) {
+        // delete current odd and move on
         Node<T>* del = odd;
         even->link = odd->link;
         delete del;
         even = even->link;
         odd = even->link;
     }
+
+    // Cases when the original length is odd
     if (even->link == last) {
         delete even->link;
         last = even;
     }
-    last->link = first;
+    // adjust last
+    last->link = head;
 }
 
 template <class T>
 const T& CircularList<T>::Front()
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (head == nullptr) throw "The list is empty.";
 
-    return first->data;
+    return head->data;
 }
 
 template <class T>
 const T& CircularList<T>::Back()
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (head == nullptr) throw "The list is empty.";
 
     return last->data;
 }
@@ -185,10 +186,10 @@ const T& CircularList<T>::Back()
 template <class T>
 const T& CircularList<T>::Get(int i)
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (head == nullptr) throw "The list is empty.";
     if (i <= 0) throw "i must be a positive integer.";
 
-    Node<T>* now = first;
+    Node<T>* now = head;
     i--;
     while (now != last && i) {
         now = now->link;
@@ -202,14 +203,14 @@ const T& CircularList<T>::Get(int i)
 template <class T>
 void CircularList<T>::Delete(int i)
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (head == nullptr) throw "The list is empty.";
     if (i <= 0) throw "i must be a positive integer.";
     if (i == 1) {
         DeleteFront();
         return;
     }
 
-    Node<T>*now = first, *prev;
+    Node<T>*now = head, *prev;
     i--;
     while (now != last && i) {
         prev = now;
@@ -222,7 +223,7 @@ void CircularList<T>::Delete(int i)
     prev->link = now->link;
     delete now;
 
-    // Node<T>*now = first, *prev;
+    // Node<T>*now = head, *prev;
     // i--;
     // while (now != nullptr && i) {
     //     prev = now;
@@ -238,7 +239,7 @@ template <class T>
 void CircularList<T>::Insert(int i, const T& e)
 {
     // Exception Cases
-    if (first == nullptr)
+    if (head == last)
         if (i == 1) InsertFront(e);
         else throw "The list is empty.";
 
@@ -252,7 +253,7 @@ void CircularList<T>::Insert(int i, const T& e)
     }
 
     // Traverse through the CircularList with now and prev
-    Node<T>*now = first, *prev;
+    Node<T>*now = head->link, *prev;
 
     // i-- at the begining since we want i-th.
     // Therefore, we only need to loop from i-1 to 0
@@ -271,13 +272,13 @@ template <class T>
 int CircularList<T>::Length()
 {
     // the list is empty, return 0
-    if (last == nullptr) return 0;
+    if (head == last) return 0;
     // the length to count the number of nodes
     int l;
-    // initialize now as the first node
-    Node<T>* now = first->link;
+    // initialize now as the head node
+    Node<T>* now = head->link;
     // Traverse through every node and increment l until nullptr(0)
-    for (l = 1; now != first; l++) now = now->link;
+    for (l = 0; now != head; l++) now = now->link;
     return l;
 }
 
@@ -285,12 +286,12 @@ template <class T>
 void CircularList<T>::Patch(int k, const T& e)
 {
     // Exception Cases
-    if (first == nullptr) throw "The list is empty.";
+    if (head == last) throw "The list is empty.";
     if (k <= 0) throw "k must be a positive integer.";
     if (k > Length()) throw "out of range.";
 
     // initialize now as the first node
-    Node<T>* now = first;
+    Node<T>* now = head->link;
 
     // k-- at the begining since we want k-th.
     // Therefore, we only need to loop from k-1 to 0.
@@ -304,21 +305,21 @@ template <class T>
 void CircularList<T>::Clear()
 {
     // Exception Case
-    if (first == nullptr) throw "The list is empty.";
+    if (head == nullptr) throw "The list is empty.";
 
     // Traverse through the CircularList with now and prev.
     Node<T>* now;
     Node<T>* prev;
 
     // Traverse through every node and delete all of them until nullptr(0).
-    for (now = first; now != nullptr;) {
+    for (now = head; now != nullptr;) {
         prev = now;
         now = now->link;
         delete prev;
     }
 
-    // Re-assignment of first and last as nullptr(0).
-    first = last = nullptr;
+    // Re-assignment of head and last as nullptr(0).
+    head = last = nullptr;
 }
 
 template <class T>
@@ -335,7 +336,7 @@ void CircularList<T>::divideMid(CircularList<T>& subList)
     }
 
     // Traverse through the CircularList with now and prev.
-    Node<T>* now = first;
+    Node<T>* now = head;
     Node<T>* prev;
 
     // Traverse through every node until ((length / 2) + 1)-th.
@@ -345,49 +346,55 @@ void CircularList<T>::divideMid(CircularList<T>& subList)
     }
 
     // Divide the two lists as instructed
-    prev->link = nullptr;
+    // Note that we need to create a new head for the sub list
+    Node<T>* h2 = new Node<T>();
+    h2->link = now;
+    last->link = h2;
     last = prev;
-    subList = CircularList<T>(now);
+    last->link = head;
+    subList = CircularList<T>(h2);
 }
 
 template <class T>
 void CircularList<T>::Split(CircularList<T> L2, Node<T>* split)
 {
     // Traverse through the CircularList with now and prev.
-    Node<T>* now = first->link;
-    Node<T>* prev = first;
+    Node<T>* now = head->link;
+    Node<T>* prev = head;
 
     // Traverse through the CircularList until split node.
-    for (; now != split && now != first; now = now->link) prev = now;
+    for (; now != split && now != head; now = now->link) prev = now;
 
     // Exception Cases
-    if (now == first) throw "Cannot find the node specified.";
+    if (now == head) throw "Cannot find the node specified.";
 
     // Split the two lists as instructed
-    prev->link = first;
-    last->link = now;
+    // Note that we need to create a new head for the split L2
+    Node<T>* h2 = new Node<T>();
+    h2->link = now;
+    last->link = h2;
     last = prev;
-    L2 = CircularList<T>(now);
+    last->link = head;
+    L2 = CircularList<T>(h2);
 }
 
 template <class T>
 CircularList<T> Merge(CircularList<T> L1, CircularList<T> L2)
 {
-    if (L1.first == nullptr) return L2;
-    if (L2.first == nullptr) return L1;
+    // if one of the list is empty, just return the other
+    if (L1.head == L1.last) return L2;
+    if (L2.head == L2.last) return L1;
 
     // Traverse through L1 with now1, and L2 with now2
-    Node<T>* now1 = L1.first->link;
-    Node<T>* now2 = L2.first->link;
+    Node<T>* now1 = L1.head->link;
+    Node<T>* now2 = L2.head->link;
 
     // The merged L3 to be returned
     CircularList<T> merged;
 
     // If now1 or now2 is not nullptr(0),
     // insert the elements of now1 and now2, in this order, to the merged one
-    merged.InsertBack(L1.first);
-    merged.InsertBack(L2.first);
-    while (now1 != L1.first || now2 != L2.first) {
+    while (now1 != L1.head || now2 != L2.head) {
         if (now1) {
             merged.InsertBack(now1->data);
             now1 = now1->link;
@@ -403,17 +410,15 @@ CircularList<T> Merge(CircularList<T> L1, CircularList<T> L2)
 template <class T>
 void CircularList<T>::Print()
 {
-    if (first == nullptr) {
+    if (head == last) {
         std::cout << "The list is empty.\n";
         return;
     };
 
-    std::cout << "first = " << first->data << ", last = " << last->data << '\n';
-
-    Node<T>* now;
-    for (now = first; now != last; now = now->link)
-        std::cout << now->data << ' ';
-    std::cout << last->data << '\n';
+    Node<T>* now = head->link;
+    std::cout << "first = " << now->data << ", last = " << last->data << '\n';
+    for (; now != head; now = now->link)
+        std::cout << now->data << " \n"[now == last ? 1 : 0];
 }
 
 #endif
