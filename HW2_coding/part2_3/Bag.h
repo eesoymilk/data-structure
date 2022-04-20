@@ -167,7 +167,8 @@ class Deque : public Queue<T>
     using Queue<T>::capacity;
     using Queue<T>::array;
     using Queue<T>::front;
-    using Queue<T>::rear;
+    // using Queue<T>::rear;
+    // using Queue<T>;
 
 public:
     Deque(int dequeCapacity = 10) : Queue<T>{dequeCapacity} {}

@@ -20,33 +20,32 @@ void Polynomial::NewTerm(const Coefficient c, const Exponent e)
 Polynomial Polynomial::Add(Polynomial poly)
 {
     Polynomial res;
-    for (auto term: this->terms) res.NewTerm(term.coef, term.exp);
-    for (auto term: poly.terms) res.NewTerm(term.coef, term.exp);
+    for (auto term : this->terms) res.NewTerm(term.coef, term.exp);
+    for (auto term : poly.terms) res.NewTerm(term.coef, term.exp);
     return res;
 }
 
 Polynomial Polynomial::Mult(Polynomial poly)
 {
     Polynomial res;
-    for (auto multiplier_term: this->terms)
-        for (auto multiplicand_term: poly.terms)
-            res.NewTerm(
-                multiplier_term.coef * multiplicand_term.coef,
-                multiplier_term.exp + multiplicand_term.exp
-            );
+    for (auto multiplier_term : this->terms)
+        for (auto multiplicand_term : poly.terms)
+            res.NewTerm(multiplier_term.coef * multiplicand_term.coef,
+                        multiplier_term.exp + multiplicand_term.exp);
     return res;
 }
 
-float Polynomial::Eval(float f) {
+float Polynomial::Eval(float f)
+{
     float res = 0;
-    for (auto term : this->terms)
-        res += term.coef * pow(f, term.exp); 
+    for (auto term : this->terms) res += term.coef * pow(f, term.exp);
     return res;
 }
 
 int Polynomial::operator!() { return this->terms.empty() ? 1 : 0; }
 
-Coefficient Polynomial::Coef(Exponent e) {
+Coefficient Polynomial::Coef(Exponent e)
+{
     if (e > this->LeadExp()) return 0;
     for (int idx = 0; idx < this->terms.size(); idx++) {
         if (e == this->terms[idx].exp) return this->terms[idx].coef;
@@ -55,11 +54,15 @@ Coefficient Polynomial::Coef(Exponent e) {
     return 0;
 }
 
-Exponent Polynomial::LeadExp() { return this->terms.empty() ? 0 : this->terms[0].exp; }
+Exponent Polynomial::LeadExp()
+{
+    return this->terms.empty() ? 0 : this->terms[0].exp;
+}
 
 std::vector<Term> Polynomial::getTerms() { return terms; }
 
-std::ostream &operator<<(std::ostream &out, Polynomial &poly) {
+std::ostream &operator<<(std::ostream &out, Polynomial &poly)
+{
     std::vector<Term> terms = poly.getTerms();
     for (int i = 0, cap = terms.size(); i < cap; i++) {
         const Coefficient c = terms[i].getCoef();
@@ -74,7 +77,8 @@ std::ostream &operator<<(std::ostream &out, Polynomial &poly) {
     return out;
 }
 
-std::istream &operator>>(std::istream &in, Polynomial &poly) {
+std::istream &operator>>(std::istream &in, Polynomial &poly)
+{
     std::string str_in;
     std::vector<std::string> str_terms;
     std::getline(in, str_in);
@@ -96,7 +100,7 @@ std::istream &operator>>(std::istream &in, Polynomial &poly) {
 
     // process each terms: eg, 3.6 x ^ 4
     // TO BE FIXED...
-    for (auto str_term: str_terms) {
+    for (auto str_term : str_terms) {
         int idx;
         Coefficient c;
         Exponent e;
@@ -109,13 +113,18 @@ std::istream &operator>>(std::istream &in, Polynomial &poly) {
             // cannot find ^: exponent == 1
             if (str_term[0] == 'x') c = 1;
             else if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
-            else c = Coefficient(std::stod(str_term.substr(0, str_term.length() - 1)));
+            else
+                c = Coefficient(
+                    std::stod(str_term.substr(0, str_term.length() - 1)));
             e = Exponent(1);
         } else {
             if (str_term[0] == 'x') c = 1;
             else if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
-            else c = Coefficient(std::stod(str_term.substr(0, str_term.find('x'))));
-            e = Exponent(std::stoi(str_term.substr(str_term.find('^') + 1, std::string::npos)));
+            else
+                c = Coefficient(
+                    std::stod(str_term.substr(0, str_term.find('x'))));
+            e = Exponent(std::stoi(
+                str_term.substr(str_term.find('^') + 1, std::string::npos)));
         }
         poly.NewTerm(c, e);
     }
