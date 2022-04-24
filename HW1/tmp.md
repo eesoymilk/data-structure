@@ -1,4 +1,8 @@
 $$
+3=\pi=e
+$$
+
+<!-- $$
 \def\arraystretch{1.2}\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
 c[0]&c[1]&c[2]&\dotsm&c[n-a]&c[n-a+1]&c[n-a+2]&\dotsm&c[2n-2a+1]&c[2n-2a+2]&\dotsm&c[\frac{-1}{2}(a^2-a+b^2-b)+an+bn-n]\\\hline
 A_{a-1\:0}&A_{a\:1}&A_{a+1\:2}&\dotsm&A_{n-1\:n-a}&A_{a-2\:0}&A_{a-1\:1}&\dotsm&A_{n-1\:n-a+1}&A_{a-3\:0}&\dotsm&A_{n-a\:n-1}\\\hline\end{array}
@@ -6,7 +10,7 @@ $$
 
 $$
 \def\arraystretch{1.2}\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline c[0]&c[1]&c[2]&\dotsm&c[n-b]&c[n-b+1]&c[n-b+2]&\dotsm&c[2n-2b+1]&c[2n-2b+2]&\dotsm&c[\frac{-1}{2}(a^2-a+b^2-b)+an+bn-n]\\\hline A_{b-1\:0}&A_{b\:1}&A_{b+1\:2}&\dotsm&A_{n-1\:n-b}&A_{b-2\:0}&A_{b-1\:1}&\dotsm&A_{n-1\:n-b+1}&A_{b-3\:0}&\dotsm&A_{n-b\:n-1}\\\hline\end{array}
-$$
+$$ -->
 
 <!-- $$
 \begin{aligned}

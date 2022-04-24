@@ -45,7 +45,7 @@ public:
 
         // dereferencing operators
         T& operator*() const { return current->data; }
-        T* operator->() const { return &current->data; }
+        T* operator->() const { return &current; }
 
         // increment
         Iterator& operator++()  // preincrement
