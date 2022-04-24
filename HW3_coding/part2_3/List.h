@@ -17,11 +17,11 @@ class Node
 
 public:
     Node() {}
-    Node(T element, Node* next = nullptr) : data(element), link(next) {}
+    Node(T element, Node *next = nullptr) : data(element), link(next) {}
 
 private:
     T data;
-    Node<T>* link = nullptr;
+    Node<T> *link = nullptr;
 };
 
 template <class T>
@@ -29,63 +29,85 @@ class List
 {
 public:
     List() {}
-    void InsertFront(const T& e);
-    void InsertBack(const T& e);
+    void InsertFront(const T &e);
+    void InsertBack(const T &e);
     void DeleteFront();
     void DeleteBack();
-    const T& Front() const;
-    const T& Back() const;
+    const T &Front() const;
+    const T &Back() const;
     int Length() const;
-    void Concatenate(List<T>& b);  // TODO
-    void Reverse();                // TODO
-    class Iterator
-    {
-    public:
-        Iterator(Node<T>* start = 0) : current{start} {}
-
-        // dereferencing operators
-        T& operator*() const { return current->data; }
-        T* operator->() const { return &current->data; }
-
-        // increment
-        Iterator& operator++()  // preincrement
-        {
-            current = current->link;
-            return *this;
-        }
-
-        Iterator& operator++(int)  // postincrement
-        {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
-        // equality
-        bool operator!=(const Iterator right) const
-        {
-            return current != right.current;
-        }
-
-        bool operator==(const Iterator right) const
-        {
-            return current == right.current;
-        }
-
-    private:
-        Node<T>* current;
-    };
+    void Concatenate(List<T> &b);
+    void Reverse();
+    class Iterator;
     Iterator Begin() { return first; }
     Iterator End() { return nullptr; }
 
 protected:
-    Node<T>*first = nullptr, *last = nullptr;
+    Node<T> *first = nullptr, *last = nullptr;
 };
 
 template <class T>
-void List<T>::InsertFront(const T& e)
+class List<T>::Iterator
 {
-    if (!first) {
+public:
+    Iterator(Node<T> *start = 0) : current{start} {}
+
+    // dereferencing operators
+    T &operator*() const { return current->data; }
+    T *operator->() const { return &current->data; }
+
+    // increment
+    Iterator &operator++() // preincrement
+    {
+        current = current->link;
+        return *this;
+    }
+
+    Iterator &operator++(int) // postincrement
+    {
+        Iterator *tmp = this;
+        ++(*this);
+        return *tmp;
+    }
+
+    // arithmetic
+    Iterator &operator+(const int x)
+    {
+        for (int i = 0; i < x && current != nullptr; i++)
+            current = current->link;
+        return *this;
+    }
+    Iterator &operator+=(const int x)
+    {
+        return (*this) + x;
+    }
+
+    // equality
+    bool operator!=(const Iterator right) const
+    {
+        return current != right.current;
+    }
+
+    bool operator==(const Iterator right) const
+    {
+        return current == right.current;
+    }
+
+    //
+    bool IsLastElement() const
+    {
+        return current->link == nullptr;
+    }
+
+private:
+    Node<T> *current;
+};
+
+template <class T>
+void List<T>::InsertFront(const T &e)
+{
+    if (!first)
+    {
         first = last = new Node<T>(e);
         return;
     }
@@ -93,9 +115,10 @@ void List<T>::InsertFront(const T& e)
 }
 
 template <class T>
-void List<T>::InsertBack(const T& e)
+void List<T>::InsertBack(const T &e)
 {
-    if (!first) {
+    if (!first)
+    {
         first = last = new Node<T>(e);
         return;
     }
@@ -105,25 +128,32 @@ void List<T>::InsertBack(const T& e)
 template <class T>
 void List<T>::DeleteFront()
 {
-    if (first == nullptr) return;
+    if (first == nullptr)
+        return;
 
-    Node<T>* front = first;
-    if (first->link == nullptr) first = last = nullptr;
-    else first = first->link;
+    Node<T> *front = first;
+    if (first->link == nullptr)
+        first = last = nullptr;
+    else
+        first = first->link;
     delete front;
 }
 
 template <class T>
 void List<T>::DeleteBack()
 {
-    if (first == nullptr) return;
+    if (first == nullptr)
+        return;
 
-    Node<T>* back = last;
+    Node<T> *back = last;
 
-    if (first->link == nullptr) {
+    if (first->link == nullptr)
+    {
         first = last = nullptr;
-    } else {
-        Node<T>* now;
+    }
+    else
+    {
+        Node<T> *now;
         for (now = first; now->link != last; now = now->link)
             ;
         now->link = nullptr;
@@ -134,17 +164,19 @@ void List<T>::DeleteBack()
 }
 
 template <class T>
-const T& List<T>::Front() const
+const T &List<T>::Front() const
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (first == nullptr)
+        throw "The list is empty.";
 
     return first->data;
 }
 
 template <class T>
-const T& List<T>::Back() const
+const T &List<T>::Back() const
 {
-    if (first == nullptr) throw "The list is empty.";
+    if (first == nullptr)
+        throw "The list is empty.";
 
     return last->data;
 }
@@ -155,10 +187,35 @@ int List<T>::Length() const
     // the length to count the number of nodes
     int l;
     // initialize now as the first node
-    Node<T>* now = first;
+    Node<T> *now = first;
     // Traverse through every node and increment l until nullptr(0)
-    for (l = 0; now != nullptr; l++) now = now->link;
+    for (l = 0; now != nullptr; l++)
+        now = now->link;
     return l;
+}
+
+template <class T>
+void List<T>::Concatenate(List<T> &b)
+{
+    Node<T> *now;
+    for (now = first; now->link != nullptr; now = now->link)
+        ;
+    now->link = b.first;
+}
+
+template <class T>
+void List<T>::Reverse()
+{
+    Node<T> *now, *prev = nullptr;
+    first = now = first;
+    while (now != nullptr)
+    {
+        Node<int> *tmp = now->link;
+        now->link = prev;
+        prev = now;
+        now = tmp;
+    }
+    first = prev;
 }
 
 // Stack
@@ -174,9 +231,9 @@ public:
 
     int Size() { return this->Length(); }
     inline bool IsEmpty() const { return this->first == nullptr; }
-    void Push(const T& e) { this->InsertBack(e); }
+    void Push(const T &e) { this->InsertBack(e); }
     void Pop() { this->DeleteBack(); }
-    const T& Top() const { return this->Back(); }
+    const T &Top() const { return this->Back(); }
 };
 
 // Queue
@@ -191,10 +248,10 @@ public:
     ~Queue() {}
     int Size() { return this->Length(); }
     inline bool IsEmpty() const { return this->first == nullptr; }
-    void Push(const T& e) { this->InsertBack(e); }
+    void Push(const T &e) { this->InsertBack(e); }
     void Pop() { this->DeleteFront(); }
-    const T& Front() const { return this->Front(); }
-    const T& Rear() const { return this->Back(); }
+    const T &Front() const { return this->Front(); }
+    const T &Rear() const { return this->Back(); }
 };
 
 #endif

@@ -2,52 +2,48 @@
 
 #include "List.h"
 
+template <class T>
+void Print(List<T> l)
+{
+    for (typename List<T>::Iterator it = l.Begin(); it != l.End(); it++)
+        std::cout << *it << " \n"[it.IsLastElement() ? 1 : 0];
+}
+
+int Eval(List<int> l)
+{
+    List<int>::Iterator it1 = l.Begin(), it2 = l.Begin() + 5;
+    int result = 0;
+    while (it2 != l.End())
+    {
+        result += (*it1) * (*it2);
+        it1++;
+        it2++;
+    }
+    return result;
+}
+
 int main()
 {
-    List<int> l;
-    // Queue<int> q;
+    List<int> l1, l2;
 
-    // q.Push(1);
-    // q.Push(2);
-    // q.Push(3);
-    // q.Push(4);
-    // for (auto it = q.Begin(); it != q.End(); ++it) std::cout << *it << ' ';
-    // std::cout << '\n';
-    // q.Pop();
-    // for (auto it = q.Begin(); it != q.End(); ++it) std::cout << *it << ' ';
-    // std::cout << '\n';
-    // PrintLinkedList(s);
+    l1.InsertBack(1);
+    l1.InsertBack(2);
+    l1.InsertBack(3);
+    l1.InsertBack(4);
+    l1.InsertBack(5);
+    l2.InsertBack(6);
+    l2.InsertBack(7);
+    l2.InsertBack(8);
+    l2.InsertBack(9);
+    l2.InsertBack(10);
 
-    l.InsertBack(1);
-    l.InsertBack(2);
-    l.InsertBack(3);
-    l.InsertBack(4);
-    l.InsertBack(5);
-    l.InsertBack(6);
-    l.InsertBack(7);
-    l.InsertBack(8);
-    l.InsertBack(9);
-    l.InsertBack(10);
-    l.InsertBack(11);
-    l.InsertBack(12);
-
-    int result = 0;
-    // Initializing the iterators
-    List<int>::Iterator iter_i = l.Begin();
-    List<int>::Iterator iter_i_plus_5 = l.Begin();
-
-    // let this iterator be 5 nodes ahead
-    for (int i = 0; i < 5; i++) ++iter_i_plus_5;
-
-    // loop through the list and add the products as instructed
-    while (iter_i != l.End() && iter_i_plus_5 != l.End()) {
-        result += *iter_i * *iter_i_plus_5;
-        ++iter_i;
-        ++iter_i_plus_5;
-    }
-
-    // output the result
-    std::cout << result << '\n';
+    Print(l1);
+    Print(l2);
+    l1.Concatenate(l2);
+    Print(l1);
+    l1.Reverse();
+    Print(l1);
+    std::cout << Eval(l1) << '\n';
 
     return 0;
 }
