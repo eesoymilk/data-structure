@@ -39,6 +39,7 @@ public:
     void InsertBack(const T& e);
     void DeleteFront();
     void DeleteBack();
+    void DeleteOdd();
     const T& Front();
     const T& Back();
     const T& Get(int i);
@@ -105,10 +106,8 @@ void Chain<T>::DeleteFront()
     if (first == nullptr) return;
 
     ChainNode<T>* front = first;
-    if (first->link == nullptr)
-        first = last = nullptr;
-    else
-        first = first->link;
+    if (first->link == nullptr) first = last = nullptr;
+    else first = first->link;
     delete front;
 }
 
@@ -138,6 +137,45 @@ const T& Chain<T>::Front()
     if (first == nullptr) throw "The list is empty.";
 
     return first->data;
+}
+
+template <class T>
+void Chain<T>::DeleteOdd()
+{
+    // No elements in the list, do nothing
+    if (first == nullptr) return;
+    // Only one element in the list, delete it and adjust first and last
+    if (first == last) {
+        delete first;
+        first = last = nullptr;
+        return;
+    }
+
+    // even and odd are the looping pointers
+    ChainNode<T>* even = first->link;
+    ChainNode<T>* odd = even->link;
+
+    // delete front since 1 is odd and re-adjust first
+    delete first;
+    first = even;
+    // Traverse through the list with even and odd
+    // with odd being ahead of even by 1 node
+    while (even != last && even->link != last) {
+        // delete current odd and move on
+        ChainNode<T>* del = odd;
+        even->link = odd->link;
+        delete del;
+        even = even->link;
+        odd = even->link;
+    }
+
+    // Cases when the original length is odd
+    if (even->link == last) {
+        delete even->link;
+        last = even;
+    }
+    // adjust last
+    last->link = nullptr;
 }
 
 template <class T>
@@ -285,9 +323,10 @@ void Chain<T>::divideMid(Chain<T>& subList)
     // Traverse through the Chain with now and prev.
     ChainNode<T>* now = first;
     ChainNode<T>* prev;
+    int mid_point = length / 2 + length % 2;
 
     // Traverse through every node until ((length / 2) + 1)-th.
-    for (int i = 0; i <= length / 2; i++) {
+    for (int i = 0; i < mid_point; i++) {
         prev = now;
         now = now->link;
     }

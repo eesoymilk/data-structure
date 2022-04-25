@@ -36,9 +36,51 @@ public:
     const T &Front() const;
     const T &Back() const;
     int Length() const;
+<<<<<<< HEAD
     void Concatenate(List<T> &b);
     void Reverse();
     class Iterator;
+=======
+    void Concatenate(List<T>& b);  // TODO
+    void Reverse();                // TODO
+    class Iterator
+    {
+    public:
+        Iterator(Node<T>* start = 0) : current{start} {}
+
+        // dereferencing operators
+        T& operator*() const { return current->data; }
+        T* operator->() const { return &current; }
+
+        // increment
+        Iterator& operator++()  // preincrement
+        {
+            current = current->link;
+            return *this;
+        }
+
+        Iterator& operator++(int)  // postincrement
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        // equality
+        bool operator!=(const Iterator right) const
+        {
+            return current != right.current;
+        }
+
+        bool operator==(const Iterator right) const
+        {
+            return current == right.current;
+        }
+
+    private:
+        Node<T>* current;
+    };
+>>>>>>> def767a2a9c5e7b002036c59c54aa83544cc1c10
     Iterator Begin() { return first; }
     Iterator End() { return nullptr; }
 
