@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cmath>
 #include <iostream>
 #include <tuple>
+#include <vector>
 
 class Matrix;
 class MatrixNode
@@ -10,6 +12,9 @@ class MatrixNode
     friend std::istream &operator>>(std::istream &, Matrix &);
     friend std::ostream &operator<<(std::ostream &, Matrix &);
 
+public:
+    MatrixNode(bool b, std::tuple<int, int, int> t);
+
 private:
     MatrixNode *down, *right;
     bool is_head;
@@ -17,10 +22,10 @@ private:
         MatrixNode *next;
         std::tuple<int, int, int> triple;
     };
-    MatrixNode(bool, std::tuple<int, int, int>);
 };
 
-MatrixNode::MatrixNode(bool b, std::tuple<int, int, int> t)
+MatrixNode::MatrixNode(bool b,
+                       std::tuple<int, int, int> t = std::make_tuple(0, 0, 0))
 {
     is_head = b;
     if (b) right = down = this;

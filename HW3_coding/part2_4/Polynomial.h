@@ -1,11 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <string>
-
-#include "Global.h"
 #include "CircularList.h"
+#include "Global.h"
 
 class Term
 {
@@ -31,7 +27,7 @@ public:
     Polynomial(const Polynomial &a);
     ~Polynomial();
     void NewTerm(double c, int e);
-    const Polynomial &operator=(const Polynomial &a);
+    Polynomial &operator=(const Polynomial &a);
     const Polynomial operator+(const Polynomial &b) const;
     const Polynomial operator-(const Polynomial &b) const;
     const Polynomial operator*(const Polynomial &b) const;
