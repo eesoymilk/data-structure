@@ -1,5 +1,13 @@
 #include "SparseMatrix.h"
 
+MatrixNode::MatrixNode(bool b,
+                       std::tuple<int, int, int> t = std::make_tuple(0, 0, 0))
+{
+    is_head = b;
+    if (b) right = down = this;
+    else triple = t;
+}
+
 std::istream &operator>>(std::istream &in, Matrix &m)
 {
     int rows, cols, n;

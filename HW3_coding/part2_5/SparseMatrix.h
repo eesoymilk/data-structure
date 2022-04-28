@@ -24,14 +24,6 @@ private:
     };
 };
 
-MatrixNode::MatrixNode(bool b,
-                       std::tuple<int, int, int> t = std::make_tuple(0, 0, 0))
-{
-    is_head = b;
-    if (b) right = down = this;
-    else triple = t;
-}
-
 class Matrix
 {
     friend std::istream &operator>>(std::istream &, Matrix &);
