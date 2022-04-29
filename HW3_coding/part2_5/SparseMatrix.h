@@ -8,10 +8,6 @@
 class Matrix;
 class MatrixNode
 {
-    friend class Matrix;
-    friend std::istream &operator>>(std::istream &, Matrix &);
-    friend std::ostream &operator<<(std::ostream &, Matrix &);
-
 public:
     MatrixNode(bool b, std::tuple<int, int, int> t);
 
@@ -22,21 +18,23 @@ private:
         MatrixNode *next;
         std::tuple<int, int, int> triple;
     };
+    friend class Matrix;
+    friend std::istream &operator>>(std::istream &, Matrix &);
+    friend std::ostream &operator<<(std::ostream &, const Matrix &);
 };
 
 class Matrix
 {
-    friend std::istream &operator>>(std::istream &, Matrix &);
-    friend std::ostream &operator<<(std::ostream &, Matrix &);
-
 public:
     Matrix();
     Matrix(const Matrix &a);
     ~Matrix();
-    void Transpose();
-    const Matrix &operator+(const Matrix &b) const;
-    const Matrix &operator*(const Matrix &b) const;
+    const Matrix Transpose() const;
+    Matrix &operator+(const Matrix &b) const;
+    Matrix &operator*(const Matrix &b) const;
 
 private:
-    MatrixNode *head;
+    MatrixNode *head = nullptr;
+    friend std::istream &operator>>(std::istream &, Matrix &);
+    friend std::ostream &operator<<(std::ostream &, const Matrix &);
 };
