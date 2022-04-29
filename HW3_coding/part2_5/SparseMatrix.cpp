@@ -85,20 +85,131 @@ const Matrix Matrix::Transpose() const
     return T;
 }
 
-Matrix &Matrix::operator+(const Matrix &b) const
+Matrix Matrix::operator+(const Matrix &b) const
 {
-    auto [rows, cols, n] = head->triple;
+    auto [rows, cols, prev_n] = head->triple;
     auto [b_rows, b_cols, b_n] = b.head->triple;
-    if (!(rows == b_rows && cols == b_cols)) return;
+    if (!(rows == b_rows && cols == b_cols)) throw "Matrices Dimension Unmatched.";
 
+    int p = std::max(rows, cols);
+    std::vector<MatrixNode *> heads;
+    for (int i = 0; i < p; i++) heads.push_back(new MatrixNode(true));
+    for (int i = 0; i < p; i++) heads[i]->next = heads[i];
+
+    MatrixNode *cur_head = head->right, *b_cur_head = b.head->right;
+    
+    int n = 0;
+    int cur_row = 0;
+    MatrixNode *last = heads[cur_row];
+    while (cur_head != head && b_cur_head != b.head) {
+        std::cout << "adding...\n";
+        MatrixNode *cur_col = cur_head->right, *b_cur_col = b_cur_head->right;
+        while (cur_col != cur_head && b_cur_col != b_cur_head) {
+            auto [r, c, v] = cur_col->triple;
+            auto [b_r, b_c, b_v] = b_cur_col->triple;
+            int col, val;
+            if (c > b_c) {
+                val = b_v;
+                col = b_c;
+                b_cur_col = b_cur_col->right;
+            }
+            else if (c < b_c) {
+                val = v;
+                col = c;
+                cur_col = cur_col->right;
+            } else {
+                val = v + b_v;
+                col = c;
+                cur_col = cur_col->right;
+                b_cur_col = b_cur_col->right;
+            }
+            last = last->right = new MatrixNode(false, std::make_tuple(r, col, val));
+            heads[col]->next = heads[col]->next->down = last;
+            n++;
+        }
+        while (cur_col != cur_head) {
+            auto [r, c, v] = cur_col->triple;
+            cur_col = cur_col->right;
+            last = last->right = new MatrixNode(false, std::make_tuple(r, c, v));
+            heads[c]->next = heads[c]->next->down = last;
+            n++;
+        }
+        while (b_cur_col != b_cur_head) {
+            auto [r, c, v] = b_cur_col->triple;
+            b_cur_col = b_cur_col->right;
+            last = last->right = new MatrixNode(false, std::make_tuple(r, c, v));
+            heads[c]->next = heads[c]->next->down = last;
+            n++;
+        }
+        last->right = heads[cur_row++];
+        last = heads[cur_row];
+        cur_head = cur_head->next;
+        b_cur_head = b_cur_head->next;
+    }
+
+    for (int i = 0; i < cols; i++) heads[i]->next->down = heads[i];
+    for (int i = 0; i < p - 1; i++) heads[i]->next = heads[i + 1];
     Matrix res;
-
-    res.head = new MatrixNode(false, std::make_tuple(rows, cols, n));
+    heads[p - 1]->next = res.head = new MatrixNode(false, std::make_tuple(rows, cols, n));
+    res.head->right = heads[0];
 
     return res;
 }
 
-Matrix &Matrix::operator*(const Matrix &b) const {}
+Matrix Matrix::operator*(const Matrix &b) const 
+{
+    auto [rows, cols, prev_n] = head->triple;
+    auto [b_rows, b_cols, b_n] = b.head->triple;
+    if (cols != b_rows) throw "Matrices Dimension Unmatched.";
+
+    int p = std::max(rows, b_cols);
+    std::vector<MatrixNode *> heads;
+    for (int i = 0; i < p; i++) heads.push_back(new MatrixNode(true));
+    for (int i = 0; i < p; i++) heads[i]->next = heads[i];
+
+    MatrixNode *cur_head = head->right;
+    
+    int n = 0;
+    for (int cur_row = 0; cur_row < rows; cur_row++) {
+        MatrixNode *last = heads[cur_row];
+        MatrixNode *b_cur_head = b.head->right;
+        for (int cur_col = 0; cur_col < b_cols; cur_col++) {
+            MatrixNode *row_node = cur_head->right;
+            MatrixNode *col_node = b_cur_head->down;
+            int val = 0;
+            while (row_node != cur_head && col_node != b_cur_head) {
+                auto [r, c, v] = row_node->triple;
+                auto [b_r, b_c, b_v] = col_node->triple;
+                if (c > b_r) {
+                    col_node = col_node->down;
+                    continue;
+                }
+                if (c < b_r) {
+                    row_node = row_node->right;
+                    continue;
+                }
+                val += v * b_v;
+                row_node = row_node->right;
+                col_node = col_node->down;
+                n++;
+            }
+            b_cur_head = b_cur_head->next;
+            if (val == 0) continue;
+            last = last->right = new MatrixNode(false, std::make_tuple(cur_row, cur_col, val));
+            heads[cur_col]->next = heads[cur_col]->next->down = last;
+        }
+        last->right = heads[cur_row];
+        cur_head = cur_head->next;
+    }
+
+    for (int i = 0; i < cols; i++) heads[i]->next->down = heads[i];
+    for (int i = 0; i < p - 1; i++) heads[i]->next = heads[i + 1];
+    Matrix res;
+    heads[p - 1]->next = res.head = new MatrixNode(false, std::make_tuple(rows, b_cols, n));
+    res.head->right = heads[0];
+
+    return res;
+}
 
 std::istream &operator>>(std::istream &in, Matrix &m)
 {

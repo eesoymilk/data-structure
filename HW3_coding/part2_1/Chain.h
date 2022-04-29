@@ -1,7 +1,7 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
-// forward declaration
+// Forward Declaration
 template <class T>
 class Chain;
 
@@ -33,6 +33,8 @@ public:
     // constructor
     Chain() {}
     Chain(ChainNode<T>* f);
+
+    ~Chain();
 
     // Chain manipulation
     void InsertFront(const T& e);
@@ -68,6 +70,16 @@ Chain<T>::Chain(ChainNode<T>* f) : first(f)
     ChainNode<T>* now = first;
     while (now->link != nullptr) now = now->link;
     last = now;
+}
+
+template <class T>
+Chain<T>::~Chain()
+{
+    if (first == nullptr) return;
+    ChainNode<T> *now = first;
+    for (; now != last; now = now->link) {
+
+    }
 }
 
 template <class T>
