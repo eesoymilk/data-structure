@@ -7,15 +7,13 @@ class Node
 {
     friend class Polynomial;
     friend class CircularList<T>;
-    friend std::ostream &operator<<(std::ostream &out, Polynomial &p);
+    friend std::ostream &operator<<(std::ostream &out, const Polynomial &p);
 
-private:
+    // private:
+public:
     T data;
     Node<T> *link = nullptr;
-
-public:
     Node() {}
-
     Node(T element, Node *next = nullptr) : data(element), link(next) {}
 };
 
@@ -23,7 +21,7 @@ template <class T>
 class CircularList
 {
     friend class Polynomial;
-    friend std::ostream &operator<<(std::ostream &out, Polynomial &p);
+    friend std::ostream &operator<<(std::ostream &out, const Polynomial &p);
 
 public:
     // constructor

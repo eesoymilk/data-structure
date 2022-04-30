@@ -7,13 +7,14 @@ class CircularList;
 
 // Merge() needs to be forward declared since it a non-member template function.
 template <class T>
-CircularList<T> Merge(CircularList<T> L1, CircularList<T> L2);
+void Merge(CircularList<T>& L1, CircularList<T>& L2, CircularList<T>& merged);
 
 template <class T>
 class Node
 {
     friend class CircularList<T>;
-    friend CircularList<T> Merge<T>(CircularList<T> L1, CircularList<T> L2);
+    friend void Merge<T>(CircularList<T>& L1, CircularList<T>& L2,
+                         CircularList<T>& merged);
 
 private:
     T data;
@@ -26,7 +27,8 @@ public:
 template <class T>
 class CircularList
 {
-    friend CircularList Merge<T>(CircularList<T> L1, CircularList<T> L2);
+    friend void Merge<T>(CircularList<T>& L1, CircularList<T>& L2,
+                         CircularList<T>& merged);
 
 public:
     // constructor
@@ -49,8 +51,8 @@ public:
     int Length();
     void Patch(int k, const T& e);
     void Clear();
-    void divideMid(CircularList<T>& subList);        // stupid
-    void Split(CircularList<T> L2, Node<T>* split);  // ??
+    void divideMid(CircularList<T>& subList);         // stupid
+    void Split(CircularList<T>& L2, Node<T>* split);  // ??
 
     // Debug
     void Print();
@@ -351,42 +353,42 @@ void CircularList<T>::divideMid(CircularList<T>& subList)
 }
 
 template <class T>
-void CircularList<T>::Split(CircularList<T> L2, Node<T>* split)
+void CircularList<T>::Split(CircularList<T>& L2, Node<T>* split)
 {
     // Traverse through the CircularList with now and prev.
     Node<T>* now = first->link;
     Node<T>* prev = first;
 
     // Traverse through the CircularList until split node.
-    for (; now != split && now != first; now = now->link) prev = now;
+    for (; now->data != split->data && now != first; now = now->link)
+        prev = now;
 
     // Exception Cases
     if (now == first) throw "Cannot find the node specified.";
 
     // Split the two lists as instructed
     prev->link = first;
-    last->link = now;
     last = prev;
-    L2 = CircularList<T>(now);
+
+    L2.first = now;
+    while (now->link != first) now = now->link;
+    now->link = L2.first;
+    L2.last = now;
 }
 
 template <class T>
-CircularList<T> Merge(CircularList<T> L1, CircularList<T> L2)
+void Merge(CircularList<T>& L1, CircularList<T>& L2, CircularList<T>& merged)
 {
-    if (L1.first == nullptr) return L2;
-    if (L2.first == nullptr) return L1;
-
     // Traverse through L1 with now1, and L2 with now2
     Node<T>* now1 = L1.first->link;
     Node<T>* now2 = L2.first->link;
 
-    // The merged L3 to be returned
-    CircularList<T> merged;
+    merged.first = merged.last = nullptr;
 
     // If now1 or now2 is not nullptr(0),
     // insert the elements of now1 and now2, in this order, to the merged one
-    merged.InsertBack(L1.first);
-    merged.InsertBack(L2.first);
+    merged.InsertBack(L1.first->data);
+    merged.InsertBack(L2.first->data);
     while (now1 != L1.first || now2 != L2.first) {
         if (now1) {
             merged.InsertBack(now1->data);
@@ -397,7 +399,6 @@ CircularList<T> Merge(CircularList<T> L1, CircularList<T> L2)
             now2 = now2->link;
         }
     }
-    return merged;
 }
 
 template <class T>
@@ -407,8 +408,6 @@ void CircularList<T>::Print()
         std::cout << "The list is empty.\n";
         return;
     };
-
-    std::cout << "first = " << first->data << ", last = " << last->data << '\n';
 
     Node<T>* now;
     for (now = first; now != last; now = now->link)

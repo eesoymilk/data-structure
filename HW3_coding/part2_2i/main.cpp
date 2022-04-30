@@ -75,6 +75,5 @@ int main()
     Merge(l1, l2, l3);
     std::cout << "l3: ";
     l3.Print();
-
     return 0;
 }

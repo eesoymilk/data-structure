@@ -7,13 +7,13 @@ class Chain;
 
 // Merge() needs to be forward declared since it a non-member template function.
 template <class T>
-Chain<T> Merge(Chain<T> L1, Chain<T> L2);
+void Merge(Chain<T>& L1, Chain<T>& L2, Chain<T>& merged);
 
 template <class T>
 class ChainNode
 {
     friend class Chain<T>;
-    friend Chain<T> Merge<T>(Chain<T> L1, Chain<T> L2);
+    friend void Merge<T>(Chain<T>& L1, Chain<T>& L2, Chain<T>& merged);
 
 private:
     T data;
@@ -27,7 +27,7 @@ public:
 template <class T>
 class Chain
 {
-    friend Chain Merge<T>(Chain<T> L1, Chain<T> L2);
+    friend void Merge<T>(Chain<T>& L1, Chain<T>& L2, Chain<T>& merged);
 
 public:
     // constructor
@@ -52,8 +52,8 @@ public:
     int Length();
     void Patch(int k, const T& e);
     void Clear();
-    void divideMid(Chain<T>& subList);             // stupid
-    void Split(Chain<T> L2, ChainNode<T>* split);  // ??
+    void divideMid(Chain<T>& subList);              // stupid
+    void Split(Chain<T>& L2, ChainNode<T>* split);  // ??
 
     // Debug
     void Print();
@@ -76,10 +76,14 @@ template <class T>
 Chain<T>::~Chain()
 {
     if (first == nullptr) return;
-    ChainNode<T> *now = first;
-    for (; now != last; now = now->link) {
-
+    ChainNode<T>*now = first, *prev;
+    while (now != last) {
+        prev = now;
+        now = now->link;
+        delete prev;
     }
+    delete now;
+    first = last = nullptr;
 }
 
 template <class T>
@@ -346,18 +350,26 @@ void Chain<T>::divideMid(Chain<T>& subList)
     // Divide the two lists as instructed
     prev->link = nullptr;
     last = prev;
-    subList = Chain<T>(now);
+    subList.first = now;
+    while (now->link != nullptr) now = now->link;
+    subList.last = now;
+    // std::cout << "end of divideMid.\n";
+    // subList = Chain<T>(now);
+    // std::cout << "subList: ";
+    // subList.Print();
+    // std::cout << "end of divideMid.\n";
 }
 
 template <class T>
-void Chain<T>::Split(Chain<T> L2, ChainNode<T>* split)
+void Chain<T>::Split(Chain<T>& L2, ChainNode<T>* split)
 {
     // Traverse through the Chain with now and prev.
     ChainNode<T>* now;
     ChainNode<T>* prev;
 
     // Traverse through the Chain until split node.
-    for (now = first; now != split && now != nullptr; now = now->link)
+    for (now = first; now->data != split->data && now != nullptr;
+         now = now->link)
         prev = now;
 
     // Exception Cases
@@ -366,18 +378,19 @@ void Chain<T>::Split(Chain<T> L2, ChainNode<T>* split)
     // Split the two lists as instructed
     prev->link = nullptr;
     last = prev;
-    L2 = Chain<T>(now);
+    L2.first = now;
+    while (now->link != nullptr) now = now->link;
+    L2.last = now;
 }
 
 template <class T>
-Chain<T> Merge(Chain<T> L1, Chain<T> L2)
+void Merge(Chain<T>& L1, Chain<T>& L2, Chain<T>& merged)
 {
     // Traverse through L1 with now1, and L2 with now2
     ChainNode<T>* now1 = L1.first;
     ChainNode<T>* now2 = L2.first;
 
-    // The merged L3 to be returned
-    Chain<T> merged;
+    merged.first = merged.last = nullptr;
 
     // If now1 or now2 is not nullptr(0),
     // insert the elements of now1 and now2, in this order, to the merged one
@@ -391,7 +404,6 @@ Chain<T> Merge(Chain<T> L1, Chain<T> L2)
             now2 = now2->link;
         }
     }
-    return merged;
 }
 
 template <class T>

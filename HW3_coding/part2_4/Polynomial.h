@@ -7,14 +7,15 @@ class Term
 {
     friend class Polynomial;
     friend std::istream &operator>>(std::istream &in, Polynomial &p);
-    friend std::ostream &operator<<(std::ostream &out, Polynomial &p);
+    friend std::ostream &operator<<(std::ostream &out, const Polynomial &p);
 
 public:
     Term(double c = 1, int e = 0) : coef(c), exp(e) {}
 
-private:
     double coef;
     int exp;
+
+private:
 };
 
 class Polynomial
@@ -35,5 +36,5 @@ public:
     double Evaluate(double x) const;
 
     friend std::istream &operator>>(std::istream &in, Polynomial &p);
-    friend std::ostream &operator<<(std::ostream &out, Polynomial &p);
+    friend std::ostream &operator<<(std::ostream &out, const Polynomial &p);
 };

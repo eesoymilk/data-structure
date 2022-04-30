@@ -31,7 +31,7 @@ void Polynomial::NewTerm(double c, int e)
         return;
     }
 
-    if (now->data.exp <= e) {
+    if (now->data.exp < e) {
         new_node->link = poly.head->link;
         poly.head->link = new_node;
         return;
@@ -101,7 +101,7 @@ const Polynomial Polynomial::operator*(const Polynomial &b) const
 {
     Polynomial res;
     Node<Term> *lhs_now = poly.head->link;
-    for (; lhs_now != poly.head; lhs_now->link) {
+    for (; lhs_now != poly.head; lhs_now = lhs_now->link) {
         Node<Term> *rhs_now = b.poly.head->link;
         for (; rhs_now != b.poly.head; rhs_now = rhs_now->link)
             res.NewTerm(lhs_now->data.coef * rhs_now->data.coef,
@@ -157,7 +157,8 @@ std::istream &operator>>(std::istream &in, Polynomial &p)
         } else if (str_term.find('^') == std::string::npos) {
             // cannot find ^: exponent == 1
             e = 1;
-            if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
+            if (str_term[0] == 'x') c = 1;
+            else if (str_term[0] == '-' && str_term[1] == 'x') c = -1;
             else c = std::stod(str_term.substr(0, str_term.length() - 1));
         } else {
             if (str_term[0] == 'x') c = 1;
@@ -172,7 +173,7 @@ std::istream &operator>>(std::istream &in, Polynomial &p)
     return in;
 }
 
-std::ostream &operator<<(std::ostream &out, Polynomial &p)
+std::ostream &operator<<(std::ostream &out, const Polynomial &p)
 {
     // auto [c, e] = std::make_pair(now->data.coef, now->data.exp);
     for (Node<Term> *now = p.poly.head->link; now != p.poly.head;
