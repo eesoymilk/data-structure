@@ -30,5 +30,8 @@
 *.exe
 *.out
 *.app
+main
 
 tempCodeRunnerFile.cpp
+.vscode/*
+.vscode

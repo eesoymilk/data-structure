@@ -1,20 +1,16 @@
 #include "BinaryTree.h"
-#include <vector>
 
-BinaryTree<int> BuildTree(std::vector<int>& vec)
-{
-	static int idx = 0;
-	BinaryTree<int> b(vec[idx++]);
-	TreeNode<int> *now = *b;
-	while (idx < vec.size()) {
-		b->leftChild = new TreeNode<int>(vec[idx++]);
-		b->rightChild = new TreeNode<int>(vec[idx++]);
-	}
-}
+using BT = BinaryTree<char>;
 
 int main()
 {
-	std::vector<int> vec = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	BinaryTree<int> b = BuildTree(vec);
-	return 0;
+    BT a(BT(BT(BT(BT('A'), '-', BT('B')), '*', BT('C')), '*', BT('D')), '+',
+         BT('E')),
+        b(BT(BT(BT('H'), 'D', BT('J')), 'B', BT('E')), 'A',
+          BT(BT('F'), 'C', BT('G')));
+    a.Inorder();
+    a.LeftSubtree().Inorder();
+    b.LevelOrder();
+    a.NoStackInorder();
+    return 0;
 }
