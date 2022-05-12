@@ -30,10 +30,10 @@ class BinaryTree
 private:
     TreeNode<T>* root = nullptr;
 
-    TreeNode<T>* Copy(TreeNode<T>* now);
-    bool Equal(TreeNode<T>* l, TreeNode<T>* r);
+    TreeNode<T>* Copy(TreeNode<T>* now) const;
+    bool Equal(TreeNode<T>* l, TreeNode<T>* r) const;
     void DeleteNode(TreeNode<T>* del);
-    void PrintNode(TreeNode<T>*);
+    void PrintNode(TreeNode<T>*) const;
 
 public:
     // creates an empty binary tree
@@ -52,19 +52,26 @@ public:
     {}
 
     // copy constructor
-    BinaryTree(BinaryTree<T>& a) { root = Copy(a.root); }
+    BinaryTree(const BinaryTree<T>& a) { root = Copy(a.root); }
 
     // assignment
-    BinaryTree<T> operator=(const BinaryTree& b) { return Equal(root, b.root); }
+    BinaryTree<T> operator=(const BinaryTree<T>& b) const
+    {
+        return Equal(root, b.root);
+    }
 
     // destructor
-    ~BinaryTree() { DeleteNode(root); }
+    ~BinaryTree()
+    {
+        DeleteNode(root);
+        root = nullptr;
+    }
 
     // return true iff the binary tree is empty
     bool isEmpty() { return root == nullptr; }
 
     // return the left subtree of *this
-    BinaryTree<T> LeftSubtree()
+    BinaryTree<T> LeftSubtree() const
     {
         return BinaryTree<T>(Copy(root->left_child));
     }
@@ -76,25 +83,25 @@ public:
     }
 
     // return the data in the root node of *this
-    const T& RootData() { return root->data; }
+    const T& RootData() const { return root->data; }
 
     // traversal methods
-    void Inorder() { Inorder(root); }
-    void Inorder(TreeNode<T>*);
-    void Preorder() { Preorder(root); }
-    void Preorder(TreeNode<T>*);
-    void Postorder() { Postorder(root); }
-    void Postorder(TreeNode<T>*);
-    void LevelOrder();
-    void NonrecInorder();
-    void NoStackInorder();
+    void Inorder() const { Inorder(root); }
+    void Inorder(TreeNode<T>*) const;
+    void Preorder() const { Preorder(root); }
+    void Preorder(TreeNode<T>*) const;
+    void Postorder() const { Postorder(root); }
+    void Postorder(TreeNode<T>*) const;
+    void LevelOrder() const;
+    void NonrecInorder() const;
+    void NoStackInorder() const;
 
     // equality test
     bool operator==(const BinaryTree& b) const { return Equal(root, b.root); }
 };
 
 template <class T>
-void BinaryTree<T>::Inorder(TreeNode<T>* now)
+void BinaryTree<T>::Inorder(TreeNode<T>* now) const
 {
     if (!now) return;
     Inorder(now->left_child);
@@ -104,7 +111,7 @@ void BinaryTree<T>::Inorder(TreeNode<T>* now)
 }
 
 template <class T>
-void BinaryTree<T>::Preorder(TreeNode<T>* now)
+void BinaryTree<T>::Preorder(TreeNode<T>* now) const
 {
     if (!now) return;
     PrintNode(now);
@@ -114,7 +121,7 @@ void BinaryTree<T>::Preorder(TreeNode<T>* now)
 }
 
 template <class T>
-void BinaryTree<T>::Postorder(TreeNode<T>* now)
+void BinaryTree<T>::Postorder(TreeNode<T>* now) const
 {
     if (!now) return;
     Postorder(now->left_child);
@@ -124,7 +131,7 @@ void BinaryTree<T>::Postorder(TreeNode<T>* now)
 }
 
 template <class T>
-void BinaryTree<T>::LevelOrder()
+void BinaryTree<T>::LevelOrder() const
 {
     std::queue<TreeNode<T>*> q;
     q.push(root);
@@ -139,14 +146,12 @@ void BinaryTree<T>::LevelOrder()
 }
 
 template <class T>
-void BinaryTree<T>::NonrecInorder()
+void BinaryTree<T>::NonrecInorder() const
 {
     std::stack<TreeNode<T>*> s;
     TreeNode<T>* now = root;
-    s.push(now);
-    now = now->left_child;
 
-    while (!s.empty()) {
+    while (now || !s.empty()) {
         while (now) {
             s.push(now);
             now = now->left_child;
@@ -160,7 +165,7 @@ void BinaryTree<T>::NonrecInorder()
 }
 
 template <class T>
-void BinaryTree<T>::NoStackInorder()
+void BinaryTree<T>::NoStackInorder() const
 {
     if (!root) return;
     TreeNode<T>*top = nullptr, *last_right = nullptr, *p, *q, *r, *r1;
@@ -185,7 +190,10 @@ void BinaryTree<T>::NoStackInorder()
 
         TreeNode<T>* av = p;
         while (true) {
-            if (p == root) return;
+            if (p == root) {
+                std::cout << '\n';
+                return;
+            }
             if (!q->left_child) {
                 r = q->left_child;
                 q->left_child = p;
@@ -226,7 +234,7 @@ void BinaryTree<T>::NoStackInorder()
 // Private Methods of BinaryTree<T>
 
 template <class T>
-TreeNode<T>* BinaryTree<T>::Copy(TreeNode<T>* now)
+TreeNode<T>* BinaryTree<T>::Copy(TreeNode<T>* now) const
 {
     if (!now) return nullptr;
     return new TreeNode<T>(now->data, Copy(now->left_child),
@@ -234,7 +242,7 @@ TreeNode<T>* BinaryTree<T>::Copy(TreeNode<T>* now)
 }
 
 template <class T>
-bool BinaryTree<T>::Equal(TreeNode<T>* l, TreeNode<T>* r)
+bool BinaryTree<T>::Equal(TreeNode<T>* l, TreeNode<T>* r) const
 {
     if (!l && !r) return true;
     return l && r && l->data == r->data &&
@@ -252,7 +260,7 @@ void BinaryTree<T>::DeleteNode(TreeNode<T>* del)
 }
 
 template <class T>
-void BinaryTree<T>::PrintNode(TreeNode<T>* node)
+void BinaryTree<T>::PrintNode(TreeNode<T>* node) const
 {
     if (!node) return;
     std::cout << node->data;
