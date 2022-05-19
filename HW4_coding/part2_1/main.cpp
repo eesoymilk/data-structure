@@ -1,9 +1,8 @@
 #include "BinaryTree.h"
 
-using BT = BinaryTree<char>;
-
 int main()
 {
+    using BT = BinaryTree<char>;
     BT a(BT(BT(BT(BT('A'), '-', BT('B')), '*', BT('C')), '*', BT('D')), '+',
          BT('E')),
         b(BT(BT(BT('H'), 'D', BT('J')), 'B', BT('E')), 'A',

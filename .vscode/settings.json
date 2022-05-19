@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        ".env": "a51",
         "vector": "cpp",
         "algorithm": "cpp",
         "atomic": "cpp",
@@ -83,6 +84,7 @@
         "variant": "cpp",
         "__functional_base": "cpp",
         "functional": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "list": "c"
     }
 }

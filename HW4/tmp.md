@@ -17,25 +17,24 @@
 \end{aligned}
 $$ -->
 
-$$
+<!-- $$
 \begin{aligned}
   &t(j)\text{ is the time needed to perform bubuling down for j-th level,}\\
   &\text{and we only need to perform such tacks for }level\ 1\ to\ h-1.\\
   &\text{Therefore, the total time is}\\
   &\quad\begin{aligned}
-    &t(1)+t(2)+\dotsm+t(h-1)
-    =\sum\limits_{j=1}^{h-1}t(j)
-    =\sum\limits_{j=1}^{h-1}2^{j-1}(h-j)\\
-    &=\sum\limits_{i=1}^{h-1}2^{h-j}\times i
-    =\sum\limits_{i=1}^{h-1}\frac{i2^h}{2^i}
-    =2^h\sum\limits_{i=1}^{h-1}\frac{i}{2^i}\\
-    &\leq2^h\sum\limits_{i=0}^{\infty}\frac{i}{2^i}
-    =2^h\times2
-    =2^{h+1}=O(n)
+    &t(1)+t(2)+\dotsm+t(h-1)\\
+    &=\sum\limits_{j=1}^{h-1}t(j)
+    =\sum\limits_{j=1}^{h-1}2^{j-1}(h-j)
+    =\sum\limits_{j=1}^h2^{j-1}(h-j)\\
+    &=\sum\limits_{i=0}^{h-1}2^{h-i-1}\times i
+    =\sum\limits_{i=1}^{h-1}\frac{i2^{h-1}}{2^i}
+    =2^{h-1}\sum\limits_{i=1}^{h-1}\frac{i}{2^i}\\
+    &\leq2^{h-1}\sum\limits_{i=0}^{\infty}\frac{i}{2^i}=2^{h-1}\times2=2^h=n+1=O(n)
   \end{aligned}\\
   &\text{Therefore, }t(1)+t(2)+\dotsm+t(h-1)=O(n).
 \end{aligned}
-$$
+$$ -->
 
 <!-- $$
 \begin{aligned}
@@ -67,21 +66,23 @@ $$ -->
 \end{aligned}
 $$ -->
 
-<!-- $$
+$$
 \begin{aligned}
   inorder&:HDJBEAFCG\\
   preorder&:ABDHJECFG\\
-  postorder&:HJDEBFGCA
+  postorder&:HJDEBFGCA\\
+  levelorder&:ABCDEFGHJ
 \end{aligned}
-$$ -->
+$$
 
-<!-- $$
+$$
 \begin{aligned}
   inorder&:A-B*C*D+E\\
   preorder&:+**-ABCDE\\
-  postorder&:AB-C*D*E+
+  postorder&:AB-C*D*E+\\
+  levelorder&:+*E*D-CAB
 \end{aligned}
-$$ -->
+$$
 
 <!-- $$
 \begin{array}{|c|c|c|c|c|c|c|c|c|}\hline

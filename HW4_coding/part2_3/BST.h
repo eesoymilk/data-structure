@@ -53,7 +53,7 @@ class BST : public Dictionary<K, E>
 private:
     NODE<K, E>* root = nullptr;
 
-    NODE<K, E>* Copy(NODE<K, E>* now);
+    NODE<K, E>* Copy(NODE<K, E>* now) const;
     bool Equal(NODE<K, E>* l, NODE<K, E>* r);
     void DeleteNode(NODE<K, E>* del);
     void PrintNode(NODE<K, E>*);
@@ -101,7 +101,8 @@ public:
     bool operator==(const BST& b) const { return Equal(root, b.root); }
 
     std::pair<K, E>* RankGet(int r);
-    void Split(const K& k, BST<K, E>& s, std::pair<K, E>*& m, BST<K, E>& b);
+    void Split(const K& k, BST<K, E>& s, std::pair<K, E>*& m,
+               BST<K, E>& b) const;
 };
 
 template <class K, class E>
@@ -143,7 +144,6 @@ void BST<K, E>::Delete(const K& k)
         if (k > del->data.first) del = del->right_child;
         else del = del->left_child;
     }
-    std::cout << del->data << '\n';
     if (!del) return;
     if (!del->left_child && !del->right_child) {
         prev->right_child = nullptr;
@@ -186,16 +186,36 @@ std::pair<K, E>* BST<K, E>::RankGet(int r)
 
 template <class K, class E>
 void BST<K, E>::Split(const K& k, BST<K, E>& s, std::pair<K, E>*& m,
-                      BST<K, E>& b)
+                      BST<K, E>& b) const
 {
     NODE<K, E>*now = root, *s_now = s.root = nullptr, *b_now = b.root = nullptr;
     if (!root) return;
     while (now) {
         if (k < now->data.first) {
+            NODE<K, E>* new_node =
+                new NODE<K, E>(now->data, nullptr, Copy(now->right_child));
+            if (!b.root) b_now = b.root = new_node;
+            else b_now = b_now->left_child = new_node;
+            now = now->left_child;
         } else if (k > now->data.first) {
+            NODE<K, E>* new_node =
+                new NODE<K, E>(now->data, Copy(now->left_child), nullptr);
+            if (!s.root) s_now = s.root = new_node;
+            else s_now = s_now->right_child = new_node;
+            now = now->right_child;
         } else {
+            if (!b.root) b_now = b.root = Copy(now->right_child);
+            else b_now = b_now->left_child = Copy(now->right_child);
+            if (!s.root) s_now = s.root = Copy(now->left_child);
+            else s_now = s_now->right_child = Copy(now->left_child);
+            m = new std::pair<int, char>(now->data);
+            return;
         }
     }
+    s.DeleteNode(s.root);
+    b.DeleteNode(b.root);
+    s.root = b.root = nullptr;
+    m = nullptr;
 }
 
 template <class K, class E>
@@ -246,7 +266,7 @@ void BST<K, E>::LevelOrder()
 // Private Methods of BST<K, E>
 
 template <class K, class E>
-NODE<K, E>* BST<K, E>::Copy(NODE<K, E>* now)
+NODE<K, E>* BST<K, E>::Copy(NODE<K, E>* now) const
 {
     if (!now) return nullptr;
     return new NODE<K, E>(now->data, Copy(now->left_child),
