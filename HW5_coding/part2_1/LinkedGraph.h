@@ -2,10 +2,12 @@
 #pragma once
 
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <list>
 #include <queue>
 #include <stack>
+#include <string>
 #include <vector>
 
 #include "GraphABC.h"

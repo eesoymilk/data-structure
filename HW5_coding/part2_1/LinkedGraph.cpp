@@ -124,14 +124,17 @@ void LinkedGraph::DfnLow(const int x) const
     std::vector<int> dfn(n, 0), low(n, 0);
     int cur_dfn = 1;
     DfnLow(x, -1, cur_dfn, dfn, low);
-    std::cout << "vertex: ";
-    for (int i = 0; i < n; i++) std::cout << i << " \n"[i + 1 == n ? 1 : 0];
-    std::cout << "dfn:    ";
+    std::cout << "  v |";
     for (int i = 0; i < n; i++)
-        std::cout << dfn[i] << " \n"[i + 1 == n ? 1 : 0];
-    std::cout << "low:    ";
+        std::cout << std::setw(3) << i << "\0\n"[i + 1 == n ? 1 : 0];
+    std::cout << std::setfill('-') << std::setw(3 * n + 6) << "\n"
+              << std::setfill(' ');
+    std::cout << "dfn |";
     for (int i = 0; i < n; i++)
-        std::cout << low[i] << " \n"[i + 1 == n ? 1 : 0];
+        std::cout << std::setw(3) << dfn[i] << "\0\n"[i + 1 == n ? 1 : 0];
+    std::cout << "low |";
+    for (int i = 0; i < n; i++)
+        std::cout << std::setw(3) << low[i] << "\0\n"[i + 1 == n ? 1 : 0];
 }
 
 void LinkedGraph::DfnLow(const int u, const int v, int& cur_dfn,
