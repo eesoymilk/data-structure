@@ -2,12 +2,16 @@
 #pragma once
 
 #include <algorithm>
+#include <climits>
 #include <iostream>
 #include <list>
 #include <queue>
+#include <set>
 #include <stack>
 #include <tuple>
 #include <vector>
+
+#define MAX (int)1e6
 
 using MatrixRow = std::vector<int>;
 using AdjacencyMatrix = std::vector<MatrixRow>;
@@ -19,16 +23,14 @@ class MatrixWDigraph
     friend std::ostream& operator<<(std::ostream& out, const MatrixWDigraph& g);
 
 public:
-    MatrixWDigraph(int n)
-        : n(n), e(0), adj_matrix(AdjacencyMatrix(n, MatrixRow(n, 0)))
-    {}
-    MatrixWDigraph(int n, EDGES edges) : MatrixWDigraph(n)
-    {
-        for (auto [u, v, w] : edges) InsertEdge(u, v, w);
-    }
+    // constructor
+    MatrixWDigraph(int);
+    MatrixWDigraph(int, EDGES);
 
     // destructor
     ~MatrixWDigraph() {}
+
+    void ShortestPath(const int v) const;
 
     bool isEmpty() const { return n == 0; }
     int NumberOfVertices() const { return n; }
@@ -52,4 +54,5 @@ public:
 private:
     AdjacencyMatrix adj_matrix;
     int n, e;
+
 };

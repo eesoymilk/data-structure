@@ -40,6 +40,8 @@ void LinkedGraph::BFS(int v) const
     std::queue<int> q;
     std::vector<bool> visited(n, false);
     q.push(v);
+    visited[v] = true;
+    std::cout << v << ' ';
     while (!q.empty()) {
         v = q.front();
         q.pop();
@@ -190,6 +192,7 @@ std::ostream& operator<<(std::ostream& out, const std::list<int>& l)
 std::ostream& operator<<(std::ostream& out, const LinkedGraph& g)
 {
     for (int i = 0; i < g.adj_lists.size(); i++)
-        out << '#' << i << ": " << g.adj_lists[i] << '\n';
+        if (!g.adj_lists[i].empty())
+            out << '#' << i << ": " << g.adj_lists[i] << '\n';
     return out;
 }

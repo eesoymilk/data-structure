@@ -1,4 +1,57 @@
-$$
+<!-- $$
+\begin{array}{|c|c|c|}\hline
+  First&Last&Simple\ Path\\\hline
+  0&0&0\\\hline
+  0&0&0\to3\to2\to0\\\hline
+  0&0&0\to1\to2\to0\\\hline
+  0&1&0\to1\\\hline
+  0&2&0\to1\to2\\\hline
+  0&2&0\to3\to2\\\hline
+  0&3&0\to3\\\hline
+  1&0&1\to2\to0\\\hline
+  1&1&1\\\hline
+  1&1&1\to2\to0\to1\\\hline
+  1&2&1\to2\\\hline
+  1&3&1\to2\to0\to3\\\hline
+  2&0&2\to0\\\hline
+  2&1&2\to0\to1\\\hline
+  2&2&2\\\hline
+  2&2&2\to0\to1\to2\\\hline
+  2&2&2\to0\to3\to2\\\hline
+  2&3&2\to0\to3\\\hline
+  3&0&3\to2\to0\\\hline
+  3&1&3\to2\to0\to1\\\hline
+  3&2&3\to2\\\hline
+  3&3&3\\\hline
+  3&3&3\to2\to0\to3\\\hline
+\end{array}
+$$ -->
+
+<!-- $$
+\begin{aligned}
+  &\text{No, it is not unique because}\\
+  &\text{there is a second one as shown below.}
+\end{aligned}
+$$ -->
+
+<!-- $$
+\cos^3\alpha=\frac{1}{4}\cos\alpha+\frac{3}{4}\cos3\alpha
+$$ -->
+<!-- $$
+\begin{aligned}
+  &\text{Since }a_2,\ a_4,\ and\ a_{14}\ \text{are on all critical paths,}\\
+  &\text{any one of whose speed-up can reduce the project finish time.}
+\end{aligned}
+$$ -->
+<!-- $$
+\begin{aligned}
+  &\text{Since Dijkstra's algorithm only works on nonnegative weights,}\\
+  &\text{and this graph has a weight of -2, the algorithm will not work properly.}\\\\
+  &Shortest\ path\ between\ vertices\ 0\ and\ 6:\ 0\to2\to1\to3\to4\to6\\
+  &Total\ weight:\ 8
+\end{aligned}
+$$ -->
+<!-- $$
 \begin{array}{|c|c|c|c|c|}\hline
   Activity&Early\ Time\ e(a_i)&Late\ Time\ l(a_i)&Slack\ l(a_i)-e(a_i)&Critical\\\hline
   a_1   &0  &4  &4&\times\\\hline
@@ -16,9 +69,9 @@ $$
   a_{13}&16 &19 &3&\times\\\hline
   a_{14}&21 &21 &0&\circ\\\hline
 \end{array}
-$$
+$$ -->
 
-<!-- $$
+$$
 \begin{aligned}
   &\text{By transitivity of partial order, we have}\\
   &\begin{rcases}
@@ -30,11 +83,13 @@ $$
     0<2\\
     2<4
   \end{rcases}\implies0<4\\
-  &\text{By definition of partial order,}\\
-  &a\ \R\ b \implies a=b\quad where\ \R\ denotes\ a\ partial\ order\\\\
-  &Since\ 0<4\ and\ 0\neq4,\ it\ is\ not\ a\ partial\ order.
+  &\begin{rcases}
+    a\ \R\ b \\
+    b\ \R\ a 
+  \end{rcases}\implies a=b\quad where\ \R\ denotes\ a\ partial\ order\\\\
+  &Since\ 0<4,\ 4<0,\ and\ 0\neq4,\ it\ is\ not\ a\ partial\ order.
 \end{aligned}
-$$ -->
+$$
 
 <!-- $$
 \begin{aligned}
@@ -66,14 +121,5 @@ $$ -->
     1&0&0&0&0&0\\
     1&1&0&0&1&0
   \end{bmatrix}
-\end{aligned}
-$$ -->
-
-<!-- $$
-\begin{aligned}
-  &\text{Euler's theorem states that a graph G has an Eulerian walk}\\
-  &\text{if and only if G is connected and each vertex in G has even degree.}\\\\
-  &\text{The Eulerian walk of the given mutigraph: }\\
-  &0\to1\to0\to2\to3
 \end{aligned}
 $$ -->

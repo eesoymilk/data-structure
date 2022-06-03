@@ -85,6 +85,8 @@
         "__functional_base": "cpp",
         "functional": "cpp",
         "queue": "cpp",
-        "list": "c"
+        "list": "c",
+        "climits": "cpp",
+        "set": "cpp"
     }
 }
