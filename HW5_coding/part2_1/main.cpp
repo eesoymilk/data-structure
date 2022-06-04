@@ -49,39 +49,5 @@ int main()
     ShowResult(G1, 1);
     ShowResult(G2, 2);
     ShowResult(G3, 3);
-
-    // std::cout << "G1\n" << G1;
-    // std::cout << "\n1. BFS(v)\n";
-    // std::cout << "G1.BFS(0): ";
-    // G1.BFS(0);
-    // std::cout << "G1.BFS(3): ";
-    // G1.BFS(3);
-    // std::cout << "G1.BFS(7): ";
-    // G1.BFS(7);
-    // std::cout << "\n2. DFS(v)\n";
-    // std::cout << "G1.DFS(0): ";
-    // G1.DFS(0);
-    // std::cout << "G1.DFS(3): ";
-    // G1.DFS(3);
-    // std::cout << "G1.DFS(7): ";
-    // G1.DFS(7);
-    // std::cout << "\n3. Component()\n";
-    // G1.Component();
-    // std::cout << "\n4. DfnLow(v)\n";
-    // std::cout << "\nG1.DfnLow(0):\n";
-    // G1.DfnLow(0);
-    // std::cout << "\nG1.DfnLow(3):\n";
-    // G1.DfnLow(3);
-    // std::cout << "\nG1.DfnLow(7):\n";
-    // G1.DfnLow(7);
-
-    // EDGES g1_edges = {{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4},
-    //                   {4, 6}, {5, 6}, {5, 7}, {5, 8}, {6, 7}, {7, 8}};
-    // LinkedGraph G(9, g1_edges);
-    // std::cout << "G:\n" << G;
-    // std::cout << "\nDFS: ";
-    // G.DFS(1);
-    // std::cout << "BFS: ";
-    // G.BFS(1);
     return 0;
 }
