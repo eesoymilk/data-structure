@@ -87,6 +87,8 @@
         "queue": "cpp",
         "list": "c",
         "climits": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "numeric": "cpp",
+        "random": "cpp"
     }
 }
