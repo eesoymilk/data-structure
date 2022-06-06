@@ -5,11 +5,11 @@
 
 int main()
 {
-    int a[10] = {3, 4, 2, 1, 5, 7, 9, 0, 6, 8};
+    int a[11] = {12, 2, 16, 30, 8, 28, 4, 10, 20, 6, 18};
 
-    for (int i = 0; i < 10; i++) std::cout << a[i] << " \n"[i == 9 ? 1 : 0];
-    QuickSort(a, 0, 9);
-    for (int i = 0; i < 10; i++) std::cout << a[i] << " \n"[i == 9 ? 1 : 0];
+    // PrintList(a, 11);
+    QuickSort(a, 11, 0, 10);
+    PrintList(a, 11);
 
     return 0;
 }
