@@ -24,21 +24,17 @@ void LinearProbing::Insert(const char* k)
 
 char* LinearProbing::Search(const char* k)
 {
-    int i = h(k), j = i, l = std::strlen(k);
+    int i = h(k), l = std::strlen(k);
 
-    if (ht[i] && std::strncmp(k, ht[j], l)) {
-        std::cout << "help\n";
+    if (!ht[i]) return nullptr;
+    if (!std::strncmp(k, ht[i], l + 1)) return ht[i];
 
-        for (Probe(j); i != j; Probe(j)) {
-            std::cout << j;
-            // keys comparison
-            if (l == std::strlen(ht[j]) && !std::strncmp(k, ht[j], l))
-                return ht[j];
-        }
-        if (i == j) return nullptr;
+    int j = i;
+    for (Probe(j); i != j; Probe(j)) {
+        std::cout << j;
+        if (!std::strncmp(k, ht[j], l + 1)) return ht[j];
     }
-
-    return ht[j];
+    return nullptr;
 }
 
 void LinearProbing::PrintHT() const
