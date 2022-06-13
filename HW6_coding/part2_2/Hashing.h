@@ -8,12 +8,14 @@ inline int h(const char*);
 
 inline void Probe(int&);
 
+void PrintKey(const char*, const int idx = -1);
+
 class LinearProbing
 {
 public:
     LinearProbing();
     void Insert(const char*);
-    char* Search(const char*);
+    const char* Search(const char*) const;
 
     void PrintHT() const;
 
@@ -29,12 +31,14 @@ struct ChainNode {
     ChainNode(const char*);
 };
 
+void PrintKeyList(const ChainNode*, const int);
+
 class Chaining
 {
 public:
     Chaining();
     void Insert(const char*);
-    char* Search(const char*);
+    const char* Search(const char*) const;
 
     void PrintHT() const;
 
