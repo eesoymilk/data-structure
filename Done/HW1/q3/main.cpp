@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #define MAX_N 100
 
@@ -9,8 +10,8 @@ private:
     int row, col;
 
 public:
-    Matrix() : row(0), col(0) { memset(mat, 0, sizeof(mat)); }
-    Matrix(int r, int c) : row(r), col(c) { memset(mat, 0, sizeof(mat)); }
+    Matrix() : row(0), col(0) { std::fill(mat, 0, sizeof(mat)); }
+    Matrix(int r, int c) : row(r), col(c) { std::fill(mat, 0, sizeof(mat)); }
 
     double *operator[](const int &x) { return mat[x]; }
     const double *operator[](const int &x) const { return mat[x]; }
@@ -24,8 +25,7 @@ Matrix Matrix::operator+(const Matrix &x) const
 {
     Matrix res(row, col);
     for (int i = 0; i < row; i++)
-        for (int j = 0; j < col; j++)
-            res[i][j] = mat[i][j] + x[i][j];
+        for (int j = 0; j < col; j++) res[i][j] = mat[i][j] + x[i][j];
     return res;
 }
 
@@ -33,8 +33,7 @@ Matrix Matrix::operator-(const Matrix &x) const
 {
     Matrix res(row, col);
     for (int i = 0; i < row; i++)
-        for (int j = 0; j < col; j++)
-            res[i][j] = mat[i][j] - x[i][j];
+        for (int j = 0; j < col; j++) res[i][j] = mat[i][j] - x[i][j];
     return res;
 }
 
@@ -43,8 +42,7 @@ Matrix operator*(const Matrix &x, const Matrix &y)
     Matrix res(x.row, y.col);
     for (int i = 0; i < x.row; i++)
         for (int j = 0; j < x.col; j++)
-            for (int k = 0; k < y.col; k++)
-                res[i][k] += x[i][j] * y[j][k];
+            for (int k = 0; k < y.col; k++) res[i][k] += x[i][j] * y[j][k];
     return res;
 }
 
@@ -68,7 +66,8 @@ public:
     }
     ComplexMatrix operator+(const ComplexMatrix &x) const;
     ComplexMatrix operator-(const ComplexMatrix &x) const;
-    friend ComplexMatrix operator*(const ComplexMatrix &x, const ComplexMatrix &y);
+    friend ComplexMatrix operator*(const ComplexMatrix &x,
+                                   const ComplexMatrix &y);
 };
 
 ComplexMatrix ComplexMatrix::operator+(const ComplexMatrix &x) const
@@ -95,8 +94,4 @@ ComplexMatrix operator*(const ComplexMatrix &x, const ComplexMatrix &y)
     return res;
 }
 
-int main()
-{
-
-    return 0;
-}
+int main() { return 0; }
