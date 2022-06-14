@@ -12,8 +12,7 @@ void PrintKey(const char* k, const int idx)
         return;
     }
 
-    int l = std::strlen(k);
-    for (int j = 0; j < l; j++) std::cout << k[j] << "\0\n"[j == l - 1 ? 1 : 0];
+    std::cout << k << '\n';
 }
 
 LinearProbing::LinearProbing() { std::fill(ht, ht + 26, nullptr); }
@@ -98,8 +97,7 @@ void PrintKeyList(const ChainNode* now, const int idx)
     if (!now) return;
     std::cout << (char)(idx + 'a') << ": ";
     while (now) {
-        int l = std::strlen(now->key);
-        for (int i = 0; i < l; i++) std::cout << now->key[i];
+        std::cout << now->key;
         if (now = now->link) std::cout << " -> ";
     }
     std::cout << '\n';
